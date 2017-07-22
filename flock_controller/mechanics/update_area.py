@@ -1,7 +1,7 @@
 """Operations to update Area."""
-from mechanics.main import CENTRAL_SERVER
-from mechanics.main import RES_CS
-from mechanics.main import gen_Area
+from flock_controller.mechanics.main import CENTRAL_SERVER
+from flock_controller.mechanics.main import RES_CS
+from flock_controller.mechanics.main import gen_Area
 from hydra import SCHEMA, Resource
 
 

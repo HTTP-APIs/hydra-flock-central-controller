@@ -1,8 +1,8 @@
 """Operations for managing commands."""
 from hydra import Resource, SCHEMA
-from mechanics.main import DRONE1, CENTRAL_SERVER
-from mechanics.main import RES_DRONE1, RES_CS
-from mechanics.main import gen_Command, gen_State
+from flock_controller.mechanics.main import DRONE1, CENTRAL_SERVER
+from flock_controller.mechanics.main import RES_DRONE1, RES_CS
+from flock_controller.mechanics.main import gen_Command, gen_State
 import json
 
 
