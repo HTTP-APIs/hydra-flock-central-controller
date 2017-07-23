@@ -1,6 +1,6 @@
 """Initialize database in drone1."""
 # from hydrus.metadata.doc import doc
-from api_docs.doc_gen import doc_gen
+from flock_controller.api_docs.doc_gen import doc_gen
 from hydrus.data.doc_parse import get_classes, insert_classes, get_all_properties, insert_properties
 from hydrus.data.db_models import Base, engine
 from sqlalchemy.orm import sessionmaker

@@ -4,14 +4,14 @@ import unittest
 import requests
 import json
 import os
-from mechanics.main import gen_Area, gen_State, gen_Command
+from flock_controller.mechanics.main import gen_Area, gen_State, gen_Command
 
 ## FOR OUTSIDE THE CONTAINER
 # CS_URL = "http://192.168.99.100:8080/" ## Windows
 # CS_URL = "http://localhost:8080/" ##Linux
 
 ## FOR INSIDE THE CONTAINER
-CS_URL = "http://central_server/"
+CS_URL = "http://localhost:8080/"
 
 class TestCSRequests(unittest.TestCase):
 

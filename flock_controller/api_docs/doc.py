@@ -1,4 +1,4 @@
-"""Generated API Documentation for Server API using server_doc_gen.py."""
+"""Generated API Documentation for Server API using server_doc_gen.py.
 
 doc = {
     "@context": {
@@ -979,4 +979,4 @@ doc = {
             "title": "EntryPoint"
         }
     ]
-}
+}"""
