@@ -17,10 +17,10 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_vocab(self):
         """Test the central server vocab."""
-        request_get = requests.get(CS_URL + 'serverapi/vocab')
-        request_put = requests.put(CS_URL + 'serverapi/vocab', data=json.dumps(dict(foo = 'bar')))
-        request_post = requests.post(CS_URL + 'serverapi/vocab', data=json.dumps(dict(foo = 'bar')))
-        request_delete = requests.delete(CS_URL + 'serverapi/vocab')
+        request_get = requests.get(CS_URL + 'api/vocab')
+        request_put = requests.put(CS_URL + 'api/vocab', data=json.dumps(dict(foo = 'bar')))
+        request_post = requests.post(CS_URL + 'api/vocab', data=json.dumps(dict(foo = 'bar')))
+        request_delete = requests.delete(CS_URL + 'api/vocab')
         assert request_get.status_code == 200
         assert request_put.status_code == 405
         assert request_post.status_code == 405
@@ -28,10 +28,10 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_entrypoint(self):
         """Test the central server entrypoint."""
-        request_get = requests.get(CS_URL + 'serverapi/')
-        request_put = requests.put(CS_URL + 'serverapi/', data=json.dumps(dict(foo = 'bar')))
-        request_post = requests.post(CS_URL + 'serverapi/', data=json.dumps(dict(foo = 'bar')))
-        request_delete = requests.delete(CS_URL + 'serverapi/')
+        request_get = requests.get(CS_URL + 'api/')
+        request_put = requests.put(CS_URL + 'api/', data=json.dumps(dict(foo = 'bar')))
+        request_post = requests.post(CS_URL + 'api/', data=json.dumps(dict(foo = 'bar')))
+        request_delete = requests.delete(CS_URL + 'api/')
         assert request_get.status_code == 200
         assert request_put.status_code == 405
         assert request_post.status_code == 405
@@ -41,10 +41,10 @@ class TestCSRequests(unittest.TestCase):
         """Test the Area endpoint."""
         area = gen_Area("0,0", "5,5")
 
-        request_get = requests.get(CS_URL + 'serverapi/Area')
-        request_put = requests.put(CS_URL + 'serverapi/Area', data=json.dumps(area))
-        request_post = requests.post(CS_URL + 'serverapi/Area', data=json.dumps(area))
-        request_delete = requests.delete(CS_URL + 'serverapi/Area')
+        request_get = requests.get(CS_URL + 'api/Area')
+        request_put = requests.put(CS_URL + 'api/Area', data=json.dumps(area))
+        request_post = requests.post(CS_URL + 'api/Area', data=json.dumps(area))
+        request_delete = requests.delete(CS_URL + 'api/Area')
         ## 404 if area is not set use mechanics.update_areaa to set area.
         assert request_get.status_code in [200, 404]
         assert request_put.status_code == 405
@@ -57,10 +57,10 @@ class TestCSRequests(unittest.TestCase):
         state = gen_State(-1000, "50", "North", "1,1", "Active", 100)
         command = gen_Command(state)
 
-        request_get = requests.get(CS_URL + 'serverapi/CommandCollection')
-        request_put = requests.put(CS_URL + 'serverapi/CommandCollection', data=json.dumps(command))
-        request_post = requests.post(CS_URL + 'serverapi/CommandCollection', data=json.dumps(command))
-        request_delete = requests.delete(CS_URL + 'serverapi/CommandCollection')
+        request_get = requests.get(CS_URL + 'api/CommandCollection')
+        request_put = requests.put(CS_URL + 'api/CommandCollection', data=json.dumps(command))
+        request_post = requests.post(CS_URL + 'api/CommandCollection', data=json.dumps(command))
+        request_delete = requests.delete(CS_URL + 'api/CommandCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
         assert request_post.status_code == 405
@@ -69,10 +69,10 @@ class TestCSRequests(unittest.TestCase):
     def test_request_datastream_collection(self):
         """Test the DatastreamCollection endpoint."""
 
-        request_get = requests.get(CS_URL + 'serverapi/DatastreamCollection')
-        request_put = requests.put(CS_URL + 'serverapi/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
-        request_post = requests.post(CS_URL + 'serverapi/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
-        request_delete = requests.delete(CS_URL + 'serverapi/DatastreamCollection')
+        request_get = requests.get(CS_URL + 'api/DatastreamCollection')
+        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
+        request_post = requests.post(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
+        request_delete = requests.delete(CS_URL + 'api/DatastreamCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
         assert request_post.status_code == 405
@@ -81,10 +81,10 @@ class TestCSRequests(unittest.TestCase):
     def test_request_drone_collection(self):
         """Test the DroneCollection endpoint."""
 
-        request_get = requests.get(CS_URL + 'serverapi/DroneCollection')
-        request_put = requests.put(CS_URL + 'serverapi/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
-        request_post = requests.post(CS_URL + 'serverapi/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
-        request_delete = requests.delete(CS_URL + 'serverapi/DroneCollection')
+        request_get = requests.get(CS_URL + 'api/DroneCollection')
+        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
+        request_post = requests.post(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
+        request_delete = requests.delete(CS_URL + 'api/DroneCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
         assert request_post.status_code == 405
@@ -93,10 +93,10 @@ class TestCSRequests(unittest.TestCase):
     def test_request_log_entry_collection(self):
         """Test the LogEntryCollection endpoint."""
 
-        request_get = requests.get(CS_URL + 'serverapi/LogEntryCollection')
-        request_put = requests.put(CS_URL + 'serverapi/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
-        request_post = requests.post(CS_URL + 'serverapi/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
-        request_delete = requests.delete(CS_URL + 'serverapi/LogEntryCollection')
+        request_get = requests.get(CS_URL + 'api/LogEntryCollection')
+        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
+        request_post = requests.post(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
+        request_delete = requests.delete(CS_URL + 'api/LogEntryCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
         assert request_post.status_code == 405
@@ -105,10 +105,10 @@ class TestCSRequests(unittest.TestCase):
     def test_request_message_collection(self):
         """Test the MessageCollection endpoint."""
 
-        request_get = requests.get(CS_URL + 'serverapi/MessageCollection')
-        request_put = requests.put(CS_URL + 'serverapi/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
-        request_post = requests.post(CS_URL + 'serverapi/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
-        request_delete = requests.delete(CS_URL + 'serverapi/MessageCollection')
+        request_get = requests.get(CS_URL + 'api/MessageCollection')
+        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
+        request_post = requests.post(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
+        request_delete = requests.delete(CS_URL + 'api/MessageCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
         assert request_post.status_code == 405
@@ -120,31 +120,31 @@ class TestCSRequests(unittest.TestCase):
         command = gen_Command(state)
         command["@type"] = "Dummy"
 
-        request_put = requests.put(CS_URL + 'serverapi/CommandCollection', data=json.dumps(command))
+        request_put = requests.put(CS_URL + 'api/CommandCollection', data=json.dumps(command))
         assert request_put.status_code == 400
 
     def test_request_datastream_collection_wrong_type_put(self):
         """Test the DatastreamCollection endpoint PUT with wrong object type."""
 
-        request_put = requests.put(CS_URL + 'serverapi/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Dummy"}))
+        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Dummy"}))
         assert request_put.status_code == 400
 
     def test_request_drone_collection_wrong_type_put(self):
         """Test the DroneCollection endpoint PUT with wrong object type."""
 
-        request_put = requests.put(CS_URL + 'serverapi/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Dummy"}))
+        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Dummy"}))
         assert request_put.status_code == 400
 
     def test_request_log_entry_collection_wrong_type_put(self):
         """Test the LogEntryCollection endpoint PUT with wrong object type."""
 
-        request_put = requests.put(CS_URL + 'serverapi/LogEntryCollection', data=json.dumps({"@type":"Dummy", "Log":"Test Log"}))
+        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"Dummy", "Log":"Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_message_collection_wrong_type_put(self):
         """Test the MessageCollection endpoint PUT with wrong object type."""
 
-        request_put = requests.put(CS_URL + 'serverapi/MessageCollection', data=json.dumps({"@type":"Dummy", "message":"Test message"}))
+        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Dummy", "message":"Test message"}))
         assert request_put.status_code == 400
 
 

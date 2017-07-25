@@ -1,7 +1,7 @@
 """Handle main configuration for the Central server."""
 from hydra import Resource
 from rdflib import Namespace
-from flock_controller.settings import API_NAME, CENTRAL_SERVER_NAMESPACE, DRONE1_NAMESPACE
+from flock_controller.settings import CENTRAL_SERVER_NAMESPACE, DRONE1_NAMESPACE
 from flock_controller.settings import DRONE1_URL, CENTRAL_SERVER_URL
 from flock_controller.settings import IRI_CS, IRI_DRONE1
 
