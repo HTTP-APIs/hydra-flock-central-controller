@@ -99,22 +99,21 @@ def doc_gen(API, BASE_URL):
                                               {"statusCode": 200, "description": "Data returned"}]))
 
     # Single object representing the area of interest. No collections.
-    area = HydraClass("Area", "Area", "Class for Area of Interest of the server", endpoint=True)
+    location = HydraClass("Location", "Location", "Class for location of the central controller.", endpoint=True)
     # Using two positions to have a bounding box
-    area.add_supported_prop(HydraClassProp("http://schema.org/geo", "TopLeft", False, False, True))
-    area.add_supported_prop(HydraClassProp("http://schema.org/geo", "BottomRight", False, False, True))
+    location.add_supported_prop(HydraClassProp("http://schema.org/geo", "Location", False, False, True))
     # Allowing updation of the area of interest
-    area.add_supported_op(HydraClassOp("UpdateArea",
+    location.add_supported_op(HydraClassOp("UpdateLocation",
                                        "POST",
-                                       "vocab:Area",
+                                       "vocab:Location",
                                        None,
-                                       [{"statusCode": 200, "description": "Area of interest changed"}]))
-    area.add_supported_op(HydraClassOp("GetArea",
+                                       [{"statusCode": 200, "description": "Controller location updated successfully."}]))
+    location.add_supported_op(HydraClassOp("GetLocation",
                                        "GET",
                                        None,
-                                       "vocab:Area",
-                                       [{"statusCode": 404, "description": "Area of interest not found"},
-                                        {"statusCode": 200, "description": "Area of interest returned"}]))
+                                       "vocab:Location",
+                                       [{"statusCode": 404, "description": "Location of Controller not found."},
+                                        {"statusCode": 200, "description": "Location of controller returned."}]))
 
     message = HydraClass("Message", "Message", "Class for messages received by the GUI interface")
     message.add_supported_prop(HydraClassProp("http://schema.org/Text", "MessageString", False, False, True))
@@ -124,12 +123,13 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Message",
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
+    
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
     api_doc.add_supported_class(datastream, collection=True)
     api_doc.add_supported_class(log, collection=True)
-    api_doc.add_supported_class(area, collection=False)
+    api_doc.add_supported_class(location, collection=False)
     api_doc.add_supported_class(command, collection=True)
     api_doc.add_supported_class(message, collection=True)
 
