@@ -46,6 +46,13 @@ def doc_gen(API, BASE_URL):
                                         "vocab:Drone",
                                         [{"statusCode": 404, "description": "Drone not found"},
                                          {"statusCode": 200, "description": "Drone Returned"}]))
+    drone.add_supported_op(HydraClassOp("DeleteDrone",
+                                        "DELETE",
+                                        None,
+                                        None,
+                                        [{"statusCode": 404, "description": "Drone not found"},
+                                         {"statusCode": 200, "description": "Drone successfully deleted."}]))
+
 
     # NOTE: Commands are stored in a collection. You may GET a command or you may DELETE it, there is not UPDATE.
     command = HydraClass("Command", "Command", "Class for drone commands")
@@ -123,7 +130,7 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Message",
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
-    
+
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
