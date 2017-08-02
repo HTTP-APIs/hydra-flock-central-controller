@@ -17,17 +17,24 @@ RES_CS = Resource.from_iri(IRI_CS)
 RES_DRONE1 = Resource.from_iri(IRI_DRONE1)
 
 
-# Methods related to Area
-def gen_Area(top_left, bottom_right):
-    """Generate a Area object."""
+# Methods related to Location
+def gen_Location(coordinate_str):
+    """Generate a Location object."""
     Area = {
-        "@type": "Area",
-        "TopLeft": top_left,
-        "BottomRight": bottom_right
+        "@type": "Location",
+        "Location": coordinate_str
     }
     return Area
-# area = gen_Area("0,0", "5,5")
 
+# Methods related to Logs
+def gen_Log(log_str):
+    """Generate a Log object."""
+    log = {
+        "@type": "Log",
+        "LogString": log_str
+    }
+
+    return log
 
 # Methods related to Messages
 def gen_Message(message):
@@ -48,7 +55,7 @@ def gen_State(drone_id, battery, direction, position, sensor_status, speed):
         "Battery": battery,
         "Direction": direction,
         "Position": position,
-        "SensorStatus": sensor_status,
+        "Status": sensor_status,
         "Speed": speed,
     }
     return state
@@ -63,3 +70,14 @@ def gen_Command(state):
         "State": state
     }
     return command
+
+
+## Some general Functions
+def ordered(obj):
+    """Sort json dicts and lists within"""
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj

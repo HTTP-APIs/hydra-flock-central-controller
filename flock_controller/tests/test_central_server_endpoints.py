@@ -4,7 +4,7 @@ import unittest
 import requests
 import json
 import os
-from flock_controller.mechanics.main import gen_Area, gen_State, gen_Command
+from flock_controller.mechanics.main import gen_Location, gen_State, gen_Command, ordered
 
 ## FOR OUTSIDE THE CONTAINER
 # CS_URL = "http://192.168.99.100:8080/" ## Windows
@@ -37,14 +37,14 @@ class TestCSRequests(unittest.TestCase):
         assert request_post.status_code == 405
         assert request_delete.status_code == 405
 
-    def test_request_area(self):
+    def test_request_location(self):
         """Test the Area endpoint."""
-        area = gen_Area("0,0", "5,5")
+        location = gen_Location("0,0")
 
-        request_get = requests.get(CS_URL + 'api/Area')
-        request_put = requests.put(CS_URL + 'api/Area', data=json.dumps(area))
-        request_post = requests.post(CS_URL + 'api/Area', data=json.dumps(area))
-        request_delete = requests.delete(CS_URL + 'api/Area')
+        request_get = requests.get(CS_URL + 'api/Location')
+        request_put = requests.put(CS_URL + 'api/Location', data=json.dumps(location))
+        request_post = requests.post(CS_URL + 'api/Location', data=json.dumps(location))
+        request_delete = requests.delete(CS_URL + 'api/Location')
         ## 404 if area is not set use mechanics.update_areaa to set area.
         assert request_get.status_code in [200, 404]
         assert request_put.status_code == 405
@@ -94,8 +94,8 @@ class TestCSRequests(unittest.TestCase):
         """Test the LogEntryCollection endpoint."""
 
         request_get = requests.get(CS_URL + 'api/LogEntryCollection')
-        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
-        request_post = requests.post(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "Log":"Test Log"}))
+        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "LogString":"Test Log"}))
+        request_post = requests.post(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "LogString":"Test Log"}))
         request_delete = requests.delete(CS_URL + 'api/LogEntryCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
@@ -146,6 +146,18 @@ class TestCSRequests(unittest.TestCase):
 
         request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Dummy", "message":"Test message"}))
         assert request_put.status_code == 400
+
+    def test_location_data(self):
+        """Test if location submitted is same as location received back."""
+        location = gen_Location("5,5")
+        request_post = requests.post(CS_URL + 'api/Location', data=json.dumps(location))
+
+        request_get = requests.get(CS_URL + 'api/Location')
+        received_location = request_get.json()
+        received_location.pop("@id", None)
+        received_location.pop("@context", None)
+
+        assert ordered(location) == ordered(received_location)
 
 
 if __name__ == '__main__':

@@ -17,11 +17,12 @@ def doc_gen(API, BASE_URL):
     # State Class
     state = HydraClass("State", "State", "Class for drone state objects")
     # Properties
+    # Status include Active, Inactive, Off, Charging
     state.add_supported_prop(HydraClassProp("http://auto.schema.org/speed", "Speed", False, False, True))
     state.add_supported_prop(HydraClassProp("http://schema.org/geo", "Position", False, False, True))
     state.add_supported_prop(HydraClassProp("http://schema.org/Property", "Direction", False, False, True))
     state.add_supported_prop(HydraClassProp("http://schema.org/fuelCapacity", "Battery", False, False, True))
-    state.add_supported_prop(HydraClassProp("https://schema.org/status", "SensorStatus", False, False, True))
+    state.add_supported_prop(HydraClassProp("https://schema.org/status", "Status", False, False, True))
     state.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
 
     # Drone Class
@@ -73,17 +74,10 @@ def doc_gen(API, BASE_URL):
                                           [{"statusCode": 201, "description": "Command added"}]))
 
     # Logs to be accessed mostly by the GUI. Mechanics should add logs for every event.
+    # Logs will simple be strings briefly explaining the operation.
     log = HydraClass("LogEntry", "LogEntry", "Class for a log entry")
-    # Subject
-    log.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", True, True, False))
-    # Predicate
-    log.add_supported_prop(HydraClassProp("http://schema.org/UpdateAction", "Update", False, True, False))
-    log.add_supported_prop(HydraClassProp("http://schema.org/ReplyAction", "Get", False, True, False))
-    log.add_supported_prop(HydraClassProp("http://schema.org/SendAction", "Send", False, True, False))
-    # Objects
-    log.add_supported_prop(HydraClassProp("vocab:State", "State", False, True, False))
-    log.add_supported_prop(HydraClassProp("vocab:Data", "Data", False, True, False))
-    log.add_supported_prop(HydraClassProp("vocab:Command", "Command", False, True, False))
+    log.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
+
     # GUI will get a certain log entry.
     log.add_supported_op(HydraClassOp("GetLog",
                                       "GET",
