@@ -18,7 +18,7 @@ def update_location(location):
 
 if __name__ == "__main__":
     ## Initialise central server location at 0,0
-    location = gen_Location("0,0")
+    location = gen_Location("0.856901647439813,14.08447265625")
     print(location)
 
     print(update_location(location))
