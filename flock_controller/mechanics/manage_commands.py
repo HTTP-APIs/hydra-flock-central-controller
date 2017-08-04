@@ -1,7 +1,7 @@
 """Operations for managing commands."""
 from hydra import Resource, SCHEMA
-from flock_controller.mechanics.main import DRONE1, CENTRAL_SERVER
-from flock_controller.mechanics.main import RES_DRONE1, RES_CS
+from flock_controller.mechanics.main import DRONE1, DRONE2, DRONE3, DRONE4, CENTRAL_SERVER
+from flock_controller.mechanics.main import RES_DRONE1, RES_DRONE2, RES_DRONE3, RES_DRONE4, RES_CS
 from flock_controller.mechanics.main import gen_Command, gen_State
 import json
 
@@ -47,3 +47,6 @@ if __name__ == "__main__":
     print(create_command(command))
 
     print(issue_command(RES_DRONE1, DRONE1, command))
+    print(issue_command(RES_DRONE2, DRONE2, command))
+    print(issue_command(RES_DRONE3, DRONE3, command))
+    print(issue_command(RES_DRONE4, DRONE4, command))
