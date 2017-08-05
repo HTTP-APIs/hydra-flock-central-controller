@@ -107,7 +107,7 @@ def doc_gen(API, BASE_URL):
                                             {"statusCode": 200, "description": "ControllerLog returned"}]))
 
 
-    httpapilog = HydraClass("HttpApiLog", "HttpApilogLog", "Class for a http api log entry")
+    httpapilog = HydraClass("HttpApiLog", "HttpApiLog", "Class for a http api log entry")
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Subject", False, False, True))
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/Action", "Predicate", False, False, True))
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Object", False, False, True))
