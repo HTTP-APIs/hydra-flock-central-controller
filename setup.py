@@ -30,5 +30,6 @@ setup(name='hydra-flock-central-controller',
                         'uWSGI==2.0.13.1',
                         'Werkzeug==0.12.2',
                         'rdflib-jsonld==0.4.0',
+                        'haversine==0.4.5',
                         'requests==2.18.1']
 )

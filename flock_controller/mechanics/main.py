@@ -3,7 +3,6 @@ from hydra import Resource
 from rdflib import Namespace
 from flock_controller.settings import CENTRAL_SERVER_NAMESPACE
 from flock_controller.settings import DRONE1_NAMESPACE, DRONE2_NAMESPACE, DRONE3_NAMESPACE, DRONE4_NAMESPACE
-from flock_controller.settings import DRONE1_URL, DRONE2_URL, DRONE3_URL, DRONE4_URL, CENTRAL_SERVER_URL
 from flock_controller.settings import IRI_CS, IRI_DRONE1, IRI_DRONE2, IRI_DRONE3, IRI_DRONE4
 
 
@@ -33,6 +32,7 @@ def gen_Location(coordinate_str):
     }
     return Area
 
+
 # Methods related to Logs
 def gen_Log(log_str):
     """Generate a Log object."""
@@ -42,6 +42,7 @@ def gen_Log(log_str):
     }
 
     return log
+
 
 # Methods related to Messages
 def gen_Message(message):
@@ -79,9 +80,9 @@ def gen_Command(state):
     return command
 
 
-## Some general Functions
+# Some general Functions
 def ordered(obj):
-    """Sort json dicts and lists within"""
+    """Sort json dicts and lists within."""
     if isinstance(obj, dict):
         return sorted((k, ordered(v)) for k, v in obj.items())
     if isinstance(obj, list):
