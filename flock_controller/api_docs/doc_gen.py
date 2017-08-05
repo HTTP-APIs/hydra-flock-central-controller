@@ -144,6 +144,15 @@ def doc_gen(API, BASE_URL):
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
 
+    anomaly = HydraClass("Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
+    anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))
+    # anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))
+    anomaly.add_supported_op(HydraClassOp("GetAnomaly",
+                                          "GET",
+                                          None,
+                                          "vocab:Anomaly",
+                                          [{"statusCode": 404, "description": "Anomaly not found"},
+                                           {"statusCode": 200, "description": "Anomaly returned"}]))
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
@@ -154,6 +163,7 @@ def doc_gen(API, BASE_URL):
     api_doc.add_supported_class(location, collection=False)
     api_doc.add_supported_class(command, collection=True)
     api_doc.add_supported_class(message, collection=True)
+    api_doc.add_supported_class(anomaly, collection=True)
 
     api_doc.add_baseResource()
     api_doc.add_baseCollection()
