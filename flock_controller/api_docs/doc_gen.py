@@ -1,7 +1,7 @@
 """API Doc generator for the server side API."""
 
 from hydrus.hydraspec.doc_writer import HydraDoc, HydraClass, HydraClassProp, HydraClassOp
-import json
+import json, os
 from flock_controller.settings import HYDRUS_SERVER_URL
 
 
@@ -73,19 +73,6 @@ def doc_gen(API, BASE_URL):
                                           None,
                                           [{"statusCode": 201, "description": "Command added"}]))
 
-    # Logs to be accessed mostly by the GUI. Mechanics should add logs for every event.
-    # Logs will simple be strings briefly explaining the operation.
-    log = HydraClass("LogEntry", "LogEntry", "Class for a log entry")
-    log.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
-
-    # GUI will get a certain log entry.
-    log.add_supported_op(HydraClassOp("GetLog",
-                                      "GET",
-                                      None,
-                                      "vocab:LogEntry",
-                                      [{"statusCode": 404, "description": "Log entry not found"},
-                                       {"statusCode": 200, "description": "Log entry returned"}]))
-
     # Data is stored as a collection. Each data object can be read.
     # New data added to the collection
     datastream = HydraClass("Datastream", "Datastream", "Class for a datastream entry")
@@ -95,9 +82,41 @@ def doc_gen(API, BASE_URL):
     datastream.add_supported_op(HydraClassOp("ReadDatastream",
                                              "GET",
                                              None,
-                                             "vocab:Data",
+                                             "vocab:Datastream",
                                              [{"statusCode": 404, "description": "Data not found"},
                                               {"statusCode": 200, "description": "Data returned"}]))
+
+    dronelog = HydraClass("DroneLog", "DroneLog", "Class for a drone log entry")
+    dronelog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    dronelog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
+    dronelog.add_supported_op(HydraClassOp("ReadDroneLog",
+                                            "GET",
+                                            None,
+                                            "vocab:DroneLog",
+                                            [{"statusCode": 404, "description": "DroneLog not found"},
+                                            {"statusCode": 200, "description": "DroneLog returned"}]))
+
+    controllerlog = HydraClass("ControllerLog", "ControllerLog", "Class for a controller log entry")
+    controllerlog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
+    controllerlog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    controllerlog.add_supported_op(HydraClassOp("ReadControllerLog",
+                                            "GET",
+                                            None,
+                                            "vocab:ControllerLog",
+                                            [{"statusCode": 404, "description": "ControllerLog not found"},
+                                            {"statusCode": 200, "description": "ControllerLog returned"}]))
+
+
+    httpapilog = HydraClass("HttpApiLog", "HttpApilogLog", "Class for a http api log entry")
+    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Subject", False, False, True))
+    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/Action", "Predicate", False, False, True))
+    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Object", False, False, True))
+    httpapilog.add_supported_op(HydraClassOp("ReadHttpApiLog",
+                                            "GET",
+                                            None,
+                                            "vocab:HttpApiLog",
+                                            [{"statusCode": 404, "description": "HttpApiLog not found"},
+                                            {"statusCode": 200, "description": "HttpApiLog returned"}]))
 
     # Single object representing the area of interest. No collections.
     location = HydraClass("Location", "Location", "Class for location of the central controller.", endpoint=True)
@@ -129,7 +148,9 @@ def doc_gen(API, BASE_URL):
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
     api_doc.add_supported_class(datastream, collection=True)
-    api_doc.add_supported_class(log, collection=True)
+    api_doc.add_supported_class(dronelog, collection=True)
+    api_doc.add_supported_class(controllerlog, collection=True)
+    api_doc.add_supported_class(httpapilog, collection=True)
     api_doc.add_supported_class(location, collection=False)
     api_doc.add_supported_class(command, collection=True)
     api_doc.add_supported_class(message, collection=True)
@@ -147,6 +168,6 @@ if __name__ == "__main__":
     doc = doc.replace('true', '"true"')
     doc = doc.replace('false', '"false"')
     doc = doc.replace('null', '"null"')
-    f = open("doc.py", "w")
+    f = open(os.path.join(os.path.dirname(__file__),"doc.py"), "w")
     f.write(doc)
     f.close()
