@@ -2,8 +2,17 @@
 from hydra import Resource, SCHEMA
 from mechanics.main import CENTRAL_SERVER
 from mechanics.main import RES_CS
-from mechanics.main import gen_Log
 import json
+
+
+def gen_Log(log_str):
+    """Generate a Log object."""
+    log = {
+        "@type": "Log",
+        "LogString": log_str
+    }
+
+    return log
 
 
 def get_logs_collection():

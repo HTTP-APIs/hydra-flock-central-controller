@@ -23,38 +23,6 @@ RES_DRONE3 = Resource.from_iri(IRI_DRONE3)
 RES_DRONE4 = Resource.from_iri(IRI_DRONE4)
 
 
-# Methods related to Location
-def gen_Location(coordinate_str):
-    """Generate a Location object."""
-    Area = {
-        "@type": "Location",
-        "Location": coordinate_str
-    }
-    return Area
-
-
-# Methods related to Logs
-def gen_Log(log_str):
-    """Generate a Log object."""
-    log = {
-        "@type": "Log",
-        "LogString": log_str
-    }
-
-    return log
-
-
-# Methods related to Messages
-def gen_Message(message):
-    """Create a new Message."""
-    message = {
-        "@type": "Message",
-        "MessageString": message,
-    }
-    return message
-
-
-# Methods related to commands
 def gen_State(drone_id, battery, direction, position, sensor_status, speed):
     """Generate a State objects."""
     state = {
@@ -67,17 +35,6 @@ def gen_State(drone_id, battery, direction, position, sensor_status, speed):
         "Speed": speed,
     }
     return state
-# state = gen_State(-1000, "50", "North", "1,1", "Active", 100)
-# print(state)
-
-
-def gen_Command(state):
-    """Generate a Command object."""
-    command = {
-        "@type": "Command",
-        "State": state
-    }
-    return command
 
 
 # Some general Functions

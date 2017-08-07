@@ -2,8 +2,17 @@
 from hydra import Resource, SCHEMA
 from flock_controller.mechanics.main import DRONE1, DRONE2, DRONE3, DRONE4, CENTRAL_SERVER
 from flock_controller.mechanics.main import RES_DRONE1, RES_DRONE2, RES_DRONE3, RES_DRONE4, RES_CS
-from flock_controller.mechanics.main import gen_Command, gen_State
+from flock_controller.mechanics.main import gen_State
 import json
+
+
+def gen_Command(state):
+    """Generate a Command object."""
+    command = {
+        "@type": "Command",
+        "State": state
+    }
+    return command
 
 
 def get_command_collection():
