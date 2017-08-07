@@ -1,8 +1,7 @@
 """Operations for managing logs."""
-from hydra import Resource, SCHEMA
-from mechanics.main import CENTRAL_SERVER
-from mechanics.main import RES_CS
 import json
+from hydra import Resource, SCHEMA
+from mechanics.main import CENTRAL_SERVER, RES_CS
 
 
 def gen_Log(log_str):

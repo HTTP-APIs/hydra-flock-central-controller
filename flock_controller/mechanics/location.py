@@ -1,6 +1,5 @@
 """Operations to update Area."""
-from flock_controller.mechanics.main import CENTRAL_SERVER
-from flock_controller.mechanics.main import RES_CS
+from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS
 from hydra import SCHEMA, Resource
 
 

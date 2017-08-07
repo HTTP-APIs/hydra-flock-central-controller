@@ -1,7 +1,8 @@
 """API Doc generator for the server side API."""
 
 from hydrus.hydraspec.doc_writer import HydraDoc, HydraClass, HydraClassProp, HydraClassOp
-import json, os
+import json
+import os
 from flock_controller.settings import HYDRUS_SERVER_URL
 
 
@@ -54,7 +55,6 @@ def doc_gen(API, BASE_URL):
                                         [{"statusCode": 404, "description": "Drone not found"},
                                          {"statusCode": 200, "description": "Drone successfully deleted."}]))
 
-
     # NOTE: Commands are stored in a collection. You may GET a command or you may DELETE it, there is not UPDATE.
     command = HydraClass("Command", "Command", "Class for drone commands")
     command.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
@@ -90,33 +90,32 @@ def doc_gen(API, BASE_URL):
     dronelog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
     dronelog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
     dronelog.add_supported_op(HydraClassOp("ReadDroneLog",
-                                            "GET",
-                                            None,
-                                            "vocab:DroneLog",
-                                            [{"statusCode": 404, "description": "DroneLog not found"},
+                                           "GET",
+                                           None,
+                                           "vocab:DroneLog",
+                                           [{"statusCode": 404, "description": "DroneLog not found"},
                                             {"statusCode": 200, "description": "DroneLog returned"}]))
 
     controllerlog = HydraClass("ControllerLog", "ControllerLog", "Class for a controller log entry")
     controllerlog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
     controllerlog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
     controllerlog.add_supported_op(HydraClassOp("ReadControllerLog",
-                                            "GET",
-                                            None,
-                                            "vocab:ControllerLog",
-                                            [{"statusCode": 404, "description": "ControllerLog not found"},
-                                            {"statusCode": 200, "description": "ControllerLog returned"}]))
-
+                                                "GET",
+                                                None,
+                                                "vocab:ControllerLog",
+                                                [{"statusCode": 404, "description": "ControllerLog not found"},
+                                                 {"statusCode": 200, "description": "ControllerLog returned"}]))
 
     httpapilog = HydraClass("HttpApiLog", "HttpApiLog", "Class for a http api log entry")
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Subject", False, False, True))
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/Action", "Predicate", False, False, True))
     httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Object", False, False, True))
     httpapilog.add_supported_op(HydraClassOp("ReadHttpApiLog",
-                                            "GET",
-                                            None,
-                                            "vocab:HttpApiLog",
-                                            [{"statusCode": 404, "description": "HttpApiLog not found"},
-                                            {"statusCode": 200, "description": "HttpApiLog returned"}]))
+                                             "GET",
+                                             None,
+                                             "vocab:HttpApiLog",
+                                             [{"statusCode": 404, "description": "HttpApiLog not found"},
+                                              {"statusCode": 200, "description": "HttpApiLog returned"}]))
 
     # Single object representing the area of interest. No collections.
     location = HydraClass("Location", "Location", "Class for location of the central controller.", endpoint=True)
@@ -124,16 +123,16 @@ def doc_gen(API, BASE_URL):
     location.add_supported_prop(HydraClassProp("http://schema.org/geo", "Location", False, False, True))
     # Allowing updation of the area of interest
     location.add_supported_op(HydraClassOp("UpdateLocation",
-                                       "POST",
-                                       "vocab:Location",
-                                       None,
-                                       [{"statusCode": 200, "description": "Controller location updated successfully."}]))
+                                           "POST",
+                                           "vocab:Location",
+                                           None,
+                                           [{"statusCode": 200, "description": "Controller location updated successfully."}]))
     location.add_supported_op(HydraClassOp("GetLocation",
-                                       "GET",
-                                       None,
-                                       "vocab:Location",
-                                       [{"statusCode": 404, "description": "Location of Controller not found."},
-                                        {"statusCode": 200, "description": "Location of controller returned."}]))
+                                           "GET",
+                                           None,
+                                           "vocab:Location",
+                                           [{"statusCode": 404, "description": "Location of Controller not found."},
+                                            {"statusCode": 200, "description": "Location of controller returned."}]))
 
     message = HydraClass("Message", "Message", "Class for messages received by the GUI interface")
     message.add_supported_prop(HydraClassProp("http://schema.org/Text", "MessageString", False, False, True))
@@ -178,6 +177,6 @@ if __name__ == "__main__":
     doc = doc.replace('true', '"true"')
     doc = doc.replace('false', '"false"')
     doc = doc.replace('null', '"null"')
-    f = open(os.path.join(os.path.dirname(__file__),"doc.py"), "w")
+    f = open(os.path.join(os.path.dirname(__file__), "doc.py"), "w")
     f.write(doc)
     f.close()
