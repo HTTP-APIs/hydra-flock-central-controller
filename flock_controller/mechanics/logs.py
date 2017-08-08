@@ -1,6 +1,6 @@
 """Operations for managing logs."""
 from hydra import Resource, SCHEMA
-from mechanics.main import CENTRAL_SERVER, RES_CS
+from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS
 
 
 def gen_HttpApiLog(source, action, target):

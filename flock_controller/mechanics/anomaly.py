@@ -3,9 +3,9 @@ import json
 import re
 import haversine
 from hydra import SCHEMA, Resource
-from flock_drone.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
-from flock_drone.mechanics.logs import send_http_api_log, gen_HttpApiLog
-from flock_drone.mechanics.distance import get_direction
+from flock_controller.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
+from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog
+from flock_controller.mechanics.location import get_direction
 
 
 def gen_Anomaly(location, id_):

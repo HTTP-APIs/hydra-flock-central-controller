@@ -127,6 +127,11 @@ def doc_gen(API, BASE_URL):
                                            "vocab:Location",
                                            None,
                                            [{"statusCode": 200, "description": "Controller location updated successfully."}]))
+    location.add_supported_op(HydraClassOp("AddLocation",
+                                           "PUT",
+                                           "vocab:Location",
+                                           None,
+                                           [{"statusCode": 200, "description": "Controller location added successfully."}]))
     location.add_supported_op(HydraClassOp("GetLocation",
                                            "GET",
                                            None,
