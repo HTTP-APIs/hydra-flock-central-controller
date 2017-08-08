@@ -10,16 +10,18 @@ from flock_controller.mechanics.main import gen_Location, gen_State, gen_Command
 # CS_URL = "http://192.168.99.100:8080/" ## Windows
 # CS_URL = "http://localhost:8080/" ##Linux
 
-## FOR INSIDE THE CONTAINER
+# FOR INSIDE THE CONTAINER
 CS_URL = "http://localhost:8080/"
 
+
 class TestCSRequests(unittest.TestCase):
+    """Test Class for requests on Central Server."""
 
     def test_request_vocab(self):
         """Test the central server vocab."""
         request_get = requests.get(CS_URL + 'api/vocab')
-        request_put = requests.put(CS_URL + 'api/vocab', data=json.dumps(dict(foo = 'bar')))
-        request_post = requests.post(CS_URL + 'api/vocab', data=json.dumps(dict(foo = 'bar')))
+        request_put = requests.put(CS_URL + 'api/vocab', data=json.dumps(dict(foo='bar')))
+        request_post = requests.post(CS_URL + 'api/vocab', data=json.dumps(dict(foo='bar')))
         request_delete = requests.delete(CS_URL + 'api/vocab')
         assert request_get.status_code == 200
         assert request_put.status_code == 405
@@ -29,8 +31,8 @@ class TestCSRequests(unittest.TestCase):
     def test_request_entrypoint(self):
         """Test the central server entrypoint."""
         request_get = requests.get(CS_URL + 'api/')
-        request_put = requests.put(CS_URL + 'api/', data=json.dumps(dict(foo = 'bar')))
-        request_post = requests.post(CS_URL + 'api/', data=json.dumps(dict(foo = 'bar')))
+        request_put = requests.put(CS_URL + 'api/', data=json.dumps(dict(foo='bar')))
+        request_post = requests.post(CS_URL + 'api/', data=json.dumps(dict(foo='bar')))
         request_delete = requests.delete(CS_URL + 'api/')
         assert request_get.status_code == 200
         assert request_put.status_code == 405
@@ -45,12 +47,11 @@ class TestCSRequests(unittest.TestCase):
         request_put = requests.put(CS_URL + 'api/Location', data=json.dumps(location))
         request_post = requests.post(CS_URL + 'api/Location', data=json.dumps(location))
         request_delete = requests.delete(CS_URL + 'api/Location')
-        ## 404 if area is not set use mechanics.update_areaa to set area.
+        # 404 if area is not set use mechanics.update_areaa to set area.
         assert request_get.status_code in [200, 404]
         assert request_put.status_code == 405
-        assert request_post.status_code in [200,201]
+        assert request_post.status_code in [200, 201]
         assert request_delete.status_code == 405
-
 
     def test_request_command_collection(self):
         """Test the CommandCollection endpoint."""
@@ -68,10 +69,9 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_datastream_collection(self):
         """Test the DatastreamCollection endpoint."""
-
         request_get = requests.get(CS_URL + 'api/DatastreamCollection')
-        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
-        request_post = requests.post(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Datastream"}))
+        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello": "World", "@type": "Datastream"}))
+        request_post = requests.post(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello": "World", "@type": "Datastream"}))
         request_delete = requests.delete(CS_URL + 'api/DatastreamCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
@@ -80,10 +80,9 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_drone_collection(self):
         """Test the DroneCollection endpoint."""
-
         request_get = requests.get(CS_URL + 'api/DroneCollection')
-        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
-        request_post = requests.post(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Drone"}))
+        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name": "test_drone", "@type": "Drone"}))
+        request_post = requests.post(CS_URL + 'api/DroneCollection', data=json.dumps({"name": "test_drone", "@type": "Drone"}))
         request_delete = requests.delete(CS_URL + 'api/DroneCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
@@ -92,10 +91,9 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_log_entry_collection(self):
         """Test the LogEntryCollection endpoint."""
-
         request_get = requests.get(CS_URL + 'api/LogEntryCollection')
-        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "LogString":"Test Log"}))
-        request_post = requests.post(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"LogEntry", "LogString":"Test Log"}))
+        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type": "LogEntry", "LogString": "Test Log"}))
+        request_post = requests.post(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type": "LogEntry", "LogString": "Test Log"}))
         request_delete = requests.delete(CS_URL + 'api/LogEntryCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
@@ -104,10 +102,9 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_message_collection(self):
         """Test the MessageCollection endpoint."""
-
         request_get = requests.get(CS_URL + 'api/MessageCollection')
-        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
-        request_post = requests.post(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Message", "message":"Test message"}))
+        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type": "Message", "message": "Test message"}))
+        request_post = requests.post(CS_URL + 'api/MessageCollection', data=json.dumps({"@type": "Message", "message": "Test message"}))
         request_delete = requests.delete(CS_URL + 'api/MessageCollection')
         assert request_get.status_code == 200
         assert request_put.status_code == 201
@@ -125,38 +122,34 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_datastream_collection_wrong_type_put(self):
         """Test the DatastreamCollection endpoint PUT with wrong object type."""
-
-        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello":"World", "@type":"Dummy"}))
+        request_put = requests.put(CS_URL + 'api/DatastreamCollection', data=json.dumps({"hello": "World", "@type": "Dummy"}))
         assert request_put.status_code == 400
 
     def test_request_drone_collection_wrong_type_put(self):
         """Test the DroneCollection endpoint PUT with wrong object type."""
-
-        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name":"test_drone", "@type":"Dummy"}))
+        request_put = requests.put(CS_URL + 'api/DroneCollection', data=json.dumps({"name": "test_drone", "@type": "Dummy"}))
         assert request_put.status_code == 400
 
     def test_request_log_entry_collection_wrong_type_put(self):
         """Test the LogEntryCollection endpoint PUT with wrong object type."""
-
-        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type":"Dummy", "Log":"Test Log"}))
+        request_put = requests.put(CS_URL + 'api/LogEntryCollection', data=json.dumps({"@type": "Dummy", "Log": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_message_collection_wrong_type_put(self):
         """Test the MessageCollection endpoint PUT with wrong object type."""
-
-        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type":"Dummy", "message":"Test message"}))
+        request_put = requests.put(CS_URL + 'api/MessageCollection', data=json.dumps({"@type": "Dummy", "message": "Test message"}))
         assert request_put.status_code == 400
 
     def test_location_data(self):
         """Test if location submitted is same as location received back."""
         location = gen_Location("5,5")
         request_post = requests.post(CS_URL + 'api/Location', data=json.dumps(location))
-
         request_get = requests.get(CS_URL + 'api/Location')
         received_location = request_get.json()
         received_location.pop("@id", None)
         received_location.pop("@context", None)
 
+        assert request_post.status_code in [201, 200]
         assert ordered(location) == ordered(received_location)
 
 

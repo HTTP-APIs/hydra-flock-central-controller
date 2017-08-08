@@ -2,14 +2,8 @@
 import json
 import re
 from hydra import SCHEMA, Resource
-from flock_drone.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS
-from flock_drone.mechanics.logs import (send_http_api_log, gen_HttpApiLog,
-                                        send_dronelog, gen_DroneLog)
-
-
-def get_new_state(anomaly, drone):
-    """Get the new state of the drone to move towards the anomaly."""
-    pass
+from flock_drone.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
+from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog
 
 
 def gen_Anomaly(location, id_):
@@ -24,9 +18,9 @@ def gen_Anomaly(location, id_):
 
 
 def get_anomaly(id_):
-    """Get the anomaly from drone server."""
+    """Get the anomaly from central server."""
     try:
-        RES = Resource(IRI_CS + "/DroneCollection/" + str(id_))
+        RES = Resource(IRI_CS + "/AnomalyCollection/" + str(id_))
         get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
         resp, body = get_anomaly_()
         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
@@ -40,7 +34,7 @@ def get_anomaly(id_):
 
 
 def get_anomaly_collection():
-    """Get the anomaly from drone server."""
+    """Get the anomaly from central server."""
     try:
         get_anomaly_collection_ = RES_CS.find_suitable_operation(
             operation_type=None, input_type=None, output_type=CENTRAL_SERVER.AnomalyCollection)
@@ -66,15 +60,12 @@ def get_anomaly_collection():
 
 def send_anomaly(anomaly, drone_identifier):
     """Send the drone current datastream to the central server."""
-    post_anomaly = RES_CS.find_suitable_operation(SCHEMA.AddAction, CENTRAL_SERVER.Anomaly)
+    RES, NAMESPACE = find_res(drone_identifier)
+    post_anomaly = RES.find_suitable_operation(SCHEMA.AddAction, NAMESPACE.Anomaly)
     resp, body = post_anomaly(anomaly)
 
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     print("Anomaly added successfully.")
 
-    http_api_log = gen_HttpApiLog("Drone %s" % (str(drone_identifier)), "PUT Anomaly", "Controller")
+    http_api_log = gen_HttpApiLog("Central Server ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
     send_http_api_log(http_api_log)
-
-    dronelog = gen_DroneLog("Drone %s" % (str(drone_identifier),),
-                            "detected anomaly at %s" % (str(anomaly["Location"])))
-    send_dronelog(dronelog)

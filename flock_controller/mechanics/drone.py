@@ -21,6 +21,8 @@ def get_drone_collection():
         matchObj = re.match(regex, drone["@id"])
         if matchObj:
             drone = get_drone(matchObj.group(2))
+            drone_list.append(drone)
+    return drone_list
 
 
 def get_drone(id_):
