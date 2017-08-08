@@ -1,9 +1,11 @@
 """Script to handle all operations related to anomalies."""
 import json
 import re
+import haversine
 from hydra import SCHEMA, Resource
 from flock_drone.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
-from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog
+from flock_drone.mechanics.logs import send_http_api_log, gen_HttpApiLog
+from flock_drone.mechanics.distance import get_direction
 
 
 def gen_Anomaly(location, id_):
@@ -69,3 +71,17 @@ def send_anomaly(anomaly, drone_identifier):
 
     http_api_log = gen_HttpApiLog("Central Server ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
     send_http_api_log(http_api_log)
+
+
+def get_new_state(anomaly, drone):
+    """Create the new drone state based on the anomaly."""
+    drone_position = tuple([float(x) for x in drone["DroneState"]["Position"].split(',')])
+    anomaly_position = tuple([float(x) for x in anomaly["Location"].split(',')])
+
+    if haversine(drone_position, anomaly_position) < 10:
+        drone["DroneState"]["State"] = "Active"
+        return drone, "ReadData"
+
+    direction = get_direction(source=drone_position, destination=anomaly_position)
+    drone["DroneState"]["Direction"] = direction
+    return drone, None
