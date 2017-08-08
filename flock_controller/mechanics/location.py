@@ -1,5 +1,9 @@
 """Operations to update Area."""
+import re
+import haversine
 from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS
+from flock_controller.mechanics.drone import get_drone_collection, get_drone
+
 from hydra import SCHEMA, Resource
 
 
@@ -23,9 +27,13 @@ def update_location(location):
     return Resource.from_iri(resp['location'])
 
 
+def find_nearest_drone(drone_list, anomaly):
+    """Find the drone closest to the anomaly."""
+    drone_list
+
+
 if __name__ == "__main__":
     # Initialise central server location at 0,0
     location = gen_Location("0.856901647439813,14.08447265625")
     print(location)
-
     print(update_location(location))
