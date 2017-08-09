@@ -1,9 +1,16 @@
 """Operations for managing messages."""
 from hydra import Resource, SCHEMA
-from mechanics.main import CENTRAL_SERVER
-from mechanics.main import RES_CS
-from mechanics.main import gen_Message
+from mechanics.main import CENTRAL_SERVER, RES_CS
 import json
+
+
+def gen_Message(message):
+    """Create a new Message."""
+    message = {
+        "@type": "Message",
+        "MessageString": message,
+    }
+    return message
 
 
 def get_message_collection():

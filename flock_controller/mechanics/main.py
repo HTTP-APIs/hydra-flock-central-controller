@@ -1,9 +1,10 @@
 """Handle main configuration for the Central server."""
+import json
+import re
 from hydra import Resource
 from rdflib import Namespace
 from flock_controller.settings import CENTRAL_SERVER_NAMESPACE
 from flock_controller.settings import DRONE1_NAMESPACE, DRONE2_NAMESPACE, DRONE3_NAMESPACE, DRONE4_NAMESPACE
-from flock_controller.settings import DRONE1_URL, DRONE2_URL, DRONE3_URL, DRONE4_URL, CENTRAL_SERVER_URL
 from flock_controller.settings import IRI_CS, IRI_DRONE1, IRI_DRONE2, IRI_DRONE3, IRI_DRONE4
 
 
@@ -14,6 +15,7 @@ DRONE1 = Namespace(DRONE1_NAMESPACE)
 DRONE2 = Namespace(DRONE2_NAMESPACE)
 DRONE3 = Namespace(DRONE3_NAMESPACE)
 DRONE4 = Namespace(DRONE4_NAMESPACE)
+DRONES = [DRONE1, DRONE2, DRONE2, DRONE4]
 # print(DRONE1)
 
 global RES_CS, RES_DRONE1, RES_DRONE2, RES_DRONE3, RES_DRONE4
@@ -22,38 +24,9 @@ RES_DRONE1 = Resource.from_iri(IRI_DRONE1)
 RES_DRONE2 = Resource.from_iri(IRI_DRONE2)
 RES_DRONE3 = Resource.from_iri(IRI_DRONE3)
 RES_DRONE4 = Resource.from_iri(IRI_DRONE4)
+RES_DRONES = [RES_DRONE1, RES_DRONE2, RES_DRONE3, RES_DRONE4]
 
 
-# Methods related to Location
-def gen_Location(coordinate_str):
-    """Generate a Location object."""
-    Area = {
-        "@type": "Location",
-        "Location": coordinate_str
-    }
-    return Area
-
-# Methods related to Logs
-def gen_Log(log_str):
-    """Generate a Log object."""
-    log = {
-        "@type": "Log",
-        "LogString": log_str
-    }
-
-    return log
-
-# Methods related to Messages
-def gen_Message(message):
-    """Create a new Message."""
-    message = {
-        "@type": "Message",
-        "MessageString": message,
-    }
-    return message
-
-
-# Methods related to commands
 def gen_State(drone_id, battery, direction, position, sensor_status, speed):
     """Generate a State objects."""
     state = {
@@ -66,25 +39,29 @@ def gen_State(drone_id, battery, direction, position, sensor_status, speed):
         "Speed": speed,
     }
     return state
-# state = gen_State(-1000, "50", "North", "1,1", "Active", 100)
-# print(state)
 
 
-def gen_Command(state):
-    """Generate a Command object."""
-    command = {
-        "@type": "Command",
-        "State": state
-    }
-    return command
-
-
-## Some general Functions
+# Some general Functions
 def ordered(obj):
-    """Sort json dicts and lists within"""
+    """Sort json dicts and lists within."""
     if isinstance(obj, dict):
         return sorted((k, ordered(v)) for k, v in obj.items())
     if isinstance(obj, list):
         return sorted(ordered(x) for x in obj)
     else:
         return obj
+
+
+def find_res(id_):
+    """Find the resource for the drone, given the drone ID."""
+    for i in range(1, 5):
+        get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
+        resp, body = get_drone_()
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+        body = json.loads(body.decode('utf-8'))
+        regex = r'/(.*)/(\d)'
+        matchObj = re.match(regex, body["@id"])
+        if matchObj:
+            if id_ == matchObj.group(2):
+                return RES_DRONES[i], DRONES[i]
+    return None
