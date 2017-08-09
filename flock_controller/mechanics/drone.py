@@ -27,7 +27,8 @@ def get_drone_collection():
 
 def get_drone(id_):
     """Get the drone from the server given the drone ID."""
-    RES = Resource(IRI_CS + "/DroneCollection/" + str(id_))
+    IRI = IRI_CS + "/DroneCollection/" + str(id_)
+    RES = Resource.from_iri(IRI)
     get_drone_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Drone)
     resp, body = get_drone_()
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)

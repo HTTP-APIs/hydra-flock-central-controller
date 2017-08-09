@@ -22,7 +22,7 @@ def gen_Anomaly(location, id_):
 def get_anomaly(id_):
     """Get the anomaly from central server."""
     try:
-        RES = Resource(IRI_CS + "/AnomalyCollection/" + str(id_))
+        RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
         get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
         resp, body = get_anomaly_()
         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
@@ -85,3 +85,7 @@ def get_new_state(anomaly, drone):
     direction = get_direction(source=drone_position, destination=anomaly_position)
     drone["DroneState"]["Direction"] = direction
     return drone, None
+
+
+if __name__ == "__main__":
+    import pdb; pdb.set_trace()

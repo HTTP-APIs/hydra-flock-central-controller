@@ -33,10 +33,13 @@ def main():
     anomalies = get_anomaly_collection()
 
     for anomaly in anomalies:
+        print("Handling anomaly")
         response = handle_anomaly(anomaly)
         if response is not None:
+            print("Assigning drone")
             command, drone = response
             RES, NAMESPACE = find_res(drone)
+            print("Issueing command")
             issue_command(RES, NAMESPACE, drone)
 
     # call main() again in LOOP_TIME
