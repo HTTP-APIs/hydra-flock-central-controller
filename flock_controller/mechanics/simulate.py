@@ -21,7 +21,7 @@ def handle_anomaly(anomaly):
     drones = get_drone_collection()
     drone = find_nearest_drone(drones, anomaly)
     if drone is not None:
-        send_anomaly(anomaly, drone["DroneState"]["DroneID"])
+        send_anomaly(anomaly, drone["DroneID"])
         drone_command = confirm_anomaly(drone)
         return (drone_command, drone)
     return None
@@ -33,10 +33,13 @@ def main():
     anomalies = get_anomaly_collection()
 
     for anomaly in anomalies:
+        print("Handling anomaly")
         response = handle_anomaly(anomaly)
         if response is not None:
+            print("Assigning drone")
             command, drone = response
             RES, NAMESPACE = find_res(drone)
+            print("Issueing command")
             issue_command(RES, NAMESPACE, drone)
 
     # call main() again in LOOP_TIME
