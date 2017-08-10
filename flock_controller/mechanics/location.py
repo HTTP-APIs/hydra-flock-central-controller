@@ -1,5 +1,5 @@
 """Operations to update Area."""
-import haversine
+from haversine import haversine
 from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS
 
 from hydra import SCHEMA, Resource
@@ -42,9 +42,9 @@ def find_nearest_drone(drone_list, anomaly):
     closest_drone = None
     for drone in drone_list:
         if drone["DroneState"]["Status"] != "Confirming":
-            if drone["DroneState"]["DroneID"] != anomaly["DroneID"]:
-                drone_location = tuple([float(x) for x in drone["DroneState"]["Position"].spit(',')])
-                anomaly_location = tuple([float(x) for x in anomaly["Position"].spit(',')])
+            if drone["DroneID"] != anomaly["DroneID"]:
+                drone_location = tuple([float(x) for x in drone["DroneState"]["Position"].split(',')])
+                anomaly_location = tuple([float(x) for x in anomaly["Location"].split(',')])
                 dist = haversine(drone_location, anomaly_location)
                 if dist < min_dist:
                     min_dist = dist

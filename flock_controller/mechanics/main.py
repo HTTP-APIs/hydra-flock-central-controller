@@ -6,7 +6,7 @@ from rdflib import Namespace
 from flock_controller.settings import CENTRAL_SERVER_NAMESPACE
 from flock_controller.settings import DRONE1_NAMESPACE, DRONE2_NAMESPACE, DRONE3_NAMESPACE, DRONE4_NAMESPACE
 from flock_controller.settings import IRI_CS, IRI_DRONE1, IRI_DRONE2, IRI_DRONE3, IRI_DRONE4
-
+import pdb
 
 global CENTRAL_SERVER, DRONE1, DRONE2, DRONE3, DRONE4
 CENTRAL_SERVER = Namespace(CENTRAL_SERVER_NAMESPACE)
@@ -54,14 +54,16 @@ def ordered(obj):
 
 def find_res(id_):
     """Find the resource for the drone, given the drone ID."""
-    for i in range(1, 5):
-        get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
-        resp, body = get_drone_()
-        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-        body = json.loads(body.decode('utf-8'))
-        regex = r'/(.*)/(\d)'
-        matchObj = re.match(regex, body["@id"])
-        if matchObj:
-            if id_ == matchObj.group(2):
+    for i in range(4):
+        try:
+            pdb.set_trace()
+            get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
+            resp, body = get_drone_()
+            assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+            body = json.loads(body.decode('utf-8'))
+            drone_id = body["DroneID"]
+            if id_ == drone_id:
                 return RES_DRONES[i], DRONES[i]
+        except (ConnectionRefusedError, ConnectionError):
+            print("Drone " + str(i+1) + " Not Accessible")
     return None

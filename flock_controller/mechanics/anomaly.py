@@ -2,7 +2,8 @@
 import json
 import re
 import haversine
-from hydra import SCHEMA, Resource
+import requests
+from hydra import SCHEMA
 from flock_controller.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
 from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog
 from flock_controller.mechanics.location import get_direction
@@ -18,20 +19,37 @@ def gen_Anomaly(location, id_):
 
     return anomaly
 
+# NOTE: Error in hydra-py, can't detect the GET operation
+# def get_anomaly(id_):
+#     """Get the anomaly from central server."""
+#     try:
+#         RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
+#         get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
+#         resp, body = get_anomaly_()
+#         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+#
+#         anomaly = json.loads(body.decode('utf-8'))
+#         anomaly.pop("@context", None)
+#         anomaly.pop("@id", None)
+#         return anomaly
+#     except ConnectionRefusedError:
+#         raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
+
 
 def get_anomaly(id_):
     """Get the anomaly from central server."""
     try:
-        RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
-        get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
-        resp, body = get_anomaly_()
-        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+        RES = IRI_CS + "/AnomalyCollection/" + str(id_)
+        response = requests.get(RES)
 
-        anomaly = json.loads(body.decode('utf-8'))
+        assert response.status_code in [201, 200]
+
+        anomaly = response.json()
         anomaly.pop("@context", None)
         anomaly.pop("@id", None)
         return anomaly
-    except ConnectionRefusedError:
+
+    except (ConnectionRefusedError, ConnectionError):
         raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
 
 
@@ -88,4 +106,4 @@ def get_new_state(anomaly, drone):
 
 
 if __name__ == "__main__":
-    import pdb; pdb.set_trace()
+    get_anomaly(4)

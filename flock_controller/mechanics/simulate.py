@@ -21,7 +21,7 @@ def handle_anomaly(anomaly):
     drones = get_drone_collection()
     drone = find_nearest_drone(drones, anomaly)
     if drone is not None:
-        send_anomaly(anomaly, drone["DroneState"]["DroneID"])
+        send_anomaly(anomaly, drone["DroneID"])
         drone_command = confirm_anomaly(drone)
         return (drone_command, drone)
     return None
