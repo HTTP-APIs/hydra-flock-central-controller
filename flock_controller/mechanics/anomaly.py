@@ -3,9 +3,9 @@ import json
 import re
 import haversine
 import requests
-from hydra import SCHEMA
+from hydra import SCHEMA, Resource
 from flock_controller.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
-from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog
+from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog, gen_ControllerLog, send_controllerlog
 from flock_controller.mechanics.location import get_direction
 
 
@@ -14,47 +14,32 @@ def gen_Anomaly(location, id_):
     anomaly = {
         "@type": "Anomaly",
         "Location": location,
-        "DroneID": id_
+        "DroneID": id_,
+        "Status": "To be Confirmed",
+        "AnomalyID": "-1"
     }
 
     return anomaly
 
-# NOTE: Error in hydra-py, can't detect the GET operation
-# def get_anomaly(id_):
-#     """Get the anomaly from central server."""
-#     try:
-#         RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
-#         get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
-#         resp, body = get_anomaly_()
-#         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-#
-#         anomaly = json.loads(body.decode('utf-8'))
-#         anomaly.pop("@context", None)
-#         anomaly.pop("@id", None)
-#         return anomaly
-#     except ConnectionRefusedError:
-#         raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
-
 
 def get_anomaly(id_):
-    """Get the anomaly from central server."""
+    """Get the anomaly with id=id_ from central server."""
     try:
-        RES = IRI_CS + "/AnomalyCollection/" + str(id_)
-        response = requests.get(RES)
+        RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
+        get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
+        resp, body = get_anomaly_()
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
-        assert response.status_code in [201, 200]
-
-        anomaly = response.json()
+        anomaly = json.loads(body.decode('utf-8'))
         anomaly.pop("@context", None)
         anomaly.pop("@id", None)
         return anomaly
-
-    except (ConnectionRefusedError, ConnectionError):
+    except ConnectionRefusedError:
         raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
 
 
 def get_anomaly_collection():
-    """Get the anomaly from central server."""
+    """Get the anomaly collection from central server."""
     try:
         get_anomaly_collection_ = RES_CS.find_suitable_operation(
             operation_type=None, input_type=None, output_type=CENTRAL_SERVER.AnomalyCollection)
@@ -64,22 +49,14 @@ def get_anomaly_collection():
         anomalies = json.loads(body.decode('utf-8'))
         anomalies.pop("@context", None)
         anomalies.pop("@id", None)
-
-        anomaly_list = list()
-        for anomaly in anomalies["members"]:
-            regex = r'/(.*)/(\d)'
-            matchObj = re.match(regex, anomaly["@id"])
-            if matchObj:
-                anomaly = get_anomaly(matchObj.group(2))
-                anomaly_list.append(anomaly)
-        return anomaly_list
+        return anomalies["members"]
 
     except ConnectionRefusedError:
         raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
 
 
 def send_anomaly(anomaly, drone_identifier):
-    """Send the drone current datastream to the central server."""
+    """Send the anomaly to the respective drone."""
     RES, NAMESPACE = find_res(drone_identifier)
     post_anomaly = RES.find_suitable_operation(SCHEMA.AddAction, NAMESPACE.Anomaly)
     resp, body = post_anomaly(anomaly)
@@ -87,8 +64,10 @@ def send_anomaly(anomaly, drone_identifier):
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     print("Anomaly added successfully.")
 
-    http_api_log = gen_HttpApiLog("Central Server ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
+    http_api_log = gen_HttpApiLog("Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
     send_http_api_log(http_api_log)
+
+    controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" %(str()))
 
 
 def get_new_state(anomaly, drone):
@@ -106,4 +85,9 @@ def get_new_state(anomaly, drone):
 
 
 if __name__ == "__main__":
-    get_anomaly(4)
+    # print(get_anomaly_collection())
+    anomaly = get_anomaly(70)
+    print(anomaly)
+
+    anomaly_collection = get_anomaly_collection()
+    print(anomaly_collection)

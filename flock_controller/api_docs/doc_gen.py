@@ -41,6 +41,12 @@ def doc_gen(API, BASE_URL):
                                         "vocab:Drone",
                                         None,
                                         [{"statusCode": 200, "description": "Drone updated"}]))
+
+    drone.add_supported_op(HydraClassOp("UpdateDrone",
+                                        "PUT",
+                                        "vocab:Drone",
+                                        None,
+                                        [{"statusCode": 200, "description": "Drone updated"}]))
     # Mechanics or GUI need to get the drone, it contains the state object of the drone already.
     drone.add_supported_op(HydraClassOp("GetDrone",
                                         "GET",
@@ -151,6 +157,9 @@ def doc_gen(API, BASE_URL):
     anomaly = HydraClass("Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
     anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))
     anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    ## Status of any anomaly can be ["Positive", "Negative", "Confirming", "To be confirmed"]
+    anomaly.add_supported_prop(HydraClassProp("http://schema.org/eventStatus", "Status", False, False, True))
+    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "AnomalyIsD", False, False, True))
 
     anomaly.add_supported_op(HydraClassOp("GetAnomaly",
                                           "GET",
@@ -158,6 +167,17 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Anomaly",
                                           [{"statusCode": 404, "description": "Anomaly not found"},
                                            {"statusCode": 200, "description": "Anomaly returned"}]))
+    anomaly.add_supported_op(HydraClassOp("UpdateAnomaly",
+                                           "PUT",
+                                           "vocab:Anomaly",
+                                           None,
+                                           [{"statusCode": 200, "description": "Anomaly updated successfully."}]))
+    anomaly.add_supported_op(HydraClassOp("AddAnomaly",
+                                           "POST",
+                                           "vocab:Anomaly",
+                                           None,
+                                           [{"statusCode": 201, "description": "Anomaly added successfully."}]))
+
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
