@@ -15,7 +15,8 @@ DRONE1 = Namespace(DRONE1_NAMESPACE)
 DRONE2 = Namespace(DRONE2_NAMESPACE)
 DRONE3 = Namespace(DRONE3_NAMESPACE)
 DRONE4 = Namespace(DRONE4_NAMESPACE)
-DRONES = [DRONE1, DRONE2, DRONE2, DRONE4]
+DRONES = [DRONE1, DRONE2, DRONE3, DRONE4]
+print(DRONES)
 # print(DRONE1)
 
 global RES_CS, RES_DRONE1, RES_DRONE2, RES_DRONE3, RES_DRONE4
@@ -54,15 +55,16 @@ def ordered(obj):
 
 def find_res(id_):
     """Find the resource for the drone, given the drone ID."""
-    for i in range(4):
+    for i in range(len(RES_DRONES)):
         try:
-            pdb.set_trace()
+            print(RES_DRONES[i], DRONES[i], i)
             get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
             resp, body = get_drone_()
             assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
             body = json.loads(body.decode('utf-8'))
             drone_id = body["DroneID"]
-            if id_ == drone_id:
+
+            if str(id_) == str(drone_id):
                 return RES_DRONES[i], DRONES[i]
         except (ConnectionRefusedError, ConnectionError):
             print("Drone " + str(i+1) + " Not Accessible")

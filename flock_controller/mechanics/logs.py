@@ -6,7 +6,7 @@ def gen_ControllerLog(log_string, drone_id):
     """Generate a Controller log object from log string."""
     controllerlog = {
         "@type": "ControllerLog",
-        "LogString": log_string
+        "LogString": log_string,
         "DroneID": drone_id,
     }
     return controllerlog

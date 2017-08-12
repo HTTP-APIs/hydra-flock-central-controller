@@ -20,7 +20,7 @@ def get_message_collection():
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
     body = json.loads(body.decode('utf-8'))
-    return body
+    return body["members"]
 
 
 def create_message(message):

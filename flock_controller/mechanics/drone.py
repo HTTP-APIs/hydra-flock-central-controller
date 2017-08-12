@@ -2,7 +2,7 @@
 import json
 import re
 import requests
-# from hydra import Resource, SCHEMA
+from hydra import Resource, SCHEMA
 from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS, IRI_CS
 
 
@@ -13,48 +13,33 @@ def get_drone_collection():
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     body = json.loads(body.decode('utf-8'))
 
-    body.pop("@context")
-    body.pop("@type")
+    return body["members"]
 
+
+def gen_drone_list_from_collection(drone_collection):
+    """Return a drone list with drone details from a drone collection."""
     drone_list = list()
-    for drone in body["members"]:
-        regex = r'/(.*)/(\d)'
-        matchObj = re.match(regex, drone["@id"])
-        if matchObj:
-            drone = get_drone(matchObj.group(2))
-            drone_list.append(drone)
+    for drone in drone_collection:
+        drone_id = drone["@id"].split("/")[-1]
+        drone_details = get_drone(drone_id)
+        drone_list.append(drone_details)
     return drone_list
 
 
-# def get_drone(id_):
-#     """Get the drone from the server given the drone ID."""
-#     IRI = IRI_CS + "/DroneCollection/" + str(id_)
-#     RES = Resource.from_iri(IRI)
-#     get_drone_ = RES.find_suitable_operation(SCHEMA.FindAction, None, CENTRAL_SERVER.Drone)
-#     resp, body = get_drone_()
-#     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-#     body = json.loads(body.decode('utf-8'))
-#
-#     body.pop("@context")
-#     body.pop("@type")
-#     return body
-
 def get_drone(id_):
-    """Get the anomaly from central server."""
-    try:
-        RES = IRI_CS + "/DroneCollection/" + str(id_)
-        response = requests.get(RES)
+    """Get the drone from the server given the drone ID."""
+    IRI = IRI_CS + "/DroneCollection/" + str(id_)
+    RES = Resource.from_iri(IRI)
+    get_drone_ = RES.find_suitable_operation(output_type=CENTRAL_SERVER.Drone)
+    resp, body = get_drone_()
+    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+    body = json.loads(body.decode('utf-8'))
 
-        assert response.status_code in [201, 200]
-
-        drone = response.json()
-        drone.pop("@context", None)
-        drone.pop("@id", None)
-        return drone
-
-    except (ConnectionRefusedError, ConnectionError):
-        raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
+    body.pop("@context")
+    body.pop("@type")
+    return body
 
 
 if __name__ == "__main__":
-    get_drone(2)
+    drone = get_drone(2)
+    # print(get_drone_collection())

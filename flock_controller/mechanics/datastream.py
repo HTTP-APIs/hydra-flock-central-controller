@@ -12,9 +12,9 @@ def get_data_collection():
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
     body = json.loads(body.decode('utf-8'))
-    return body
+    return body["members"]
 
 
 if __name__ == "__main__":
     data = get_data_collection()
-    pdb.set_trace()
+    # pdb.set_trace()
