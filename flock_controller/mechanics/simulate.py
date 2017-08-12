@@ -36,7 +36,6 @@ def find_non_confirmed_and_negative_anomalies(anomaly_collection):
         matchObj = re.match(regex, anomaly["@id"])
         if matchObj:
             anomaly_id = matchObj.group(2)
-            print(anomaly_id,  anomaly["@id"])
         if anomaly_id is not None:
             anomaly = get_anomaly(anomaly_id)
             if anomaly["Status"] == "To be Confirmed":
@@ -53,7 +52,7 @@ def main():
     anomaly_collection = get_anomaly_collection()
     drone_collection = get_drone_collection()
 
-    non_confirmd_anomalies, negative_anomalies = find_non_confirmed_and_negative_anomalies(anomaly_collection)
+    non_confirmed_anomalies, negative_anomalies = find_non_confirmed_and_negative_anomalies(anomaly_collection)
 
     ## Handle non_confirmed_anomalies
     for anomaly in non_confirmed_anomalies:

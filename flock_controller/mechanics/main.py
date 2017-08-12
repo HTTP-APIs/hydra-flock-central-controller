@@ -56,7 +56,6 @@ def find_res(id_):
     """Find the resource for the drone, given the drone ID."""
     for i in range(len(RES_DRONES)):
         try:
-            print(RES_DRONES[i], DRONES[i], i)
             get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
             resp, body = get_drone_()
             assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
