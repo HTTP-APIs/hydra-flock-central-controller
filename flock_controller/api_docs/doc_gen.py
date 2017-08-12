@@ -177,6 +177,12 @@ def doc_gen(API, BASE_URL):
                                            "vocab:Anomaly",
                                            None,
                                            [{"statusCode": 201, "description": "Anomaly updated successfully."}]))
+    anomaly.add_supported_op(HydraClassOp("DeleteAnomaly",
+                                        "DELETE",
+                                        None,
+                                        None,
+                                        [{"statusCode": 404, "description": "Anomaly not found"},
+                                         {"statusCode": 200, "description": "Anomaly successfully deleted."}]))
 
 
     api_doc.add_supported_class(drone, collection=True)
