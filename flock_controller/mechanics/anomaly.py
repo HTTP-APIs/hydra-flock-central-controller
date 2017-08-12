@@ -99,7 +99,7 @@ def send_anomaly(anomaly, drone_identifier):
     send_http_api_log(http_api_log)
 
     controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" %(str(anomaly["AnomalyID"])), "Drone %s" %(str(drone_identifier)))
-
+    send_controllerlog(controllerlog)
 #
 # def get_new_state(anomaly, drone):
 #     """Create the new drone state based on the anomaly."""
