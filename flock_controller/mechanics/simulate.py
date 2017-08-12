@@ -9,7 +9,7 @@ from flock_controller.mechanics.commands import confirm_anomaly, issue_command
 from flock_controller.mechanics.location import find_nearest_drone
 
 global LOOP_TIME
-LOOP_TIME = 20      # Keeping loop time more than drone to prevent requests before update is complete
+LOOP_TIME = 17      # Keeping loop time more than drone to prevent requests before update is complete
 
 
 def is_confirming(drone):
@@ -49,11 +49,12 @@ def find_non_confirmed_and_negative_anomalies(anomaly_collection):
 def main():
     """15 second time loop for drone."""
     print("Simulation")
+
     anomaly_collection = get_anomaly_collection()
     drone_collection = get_drone_collection()
 
     non_confirmed_anomalies, negative_anomalies = find_non_confirmed_and_negative_anomalies(anomaly_collection)
-
+    print(non_confirmed_anomalies)
     ## Handle non_confirmed_anomalies
     for anomaly in non_confirmed_anomalies:
         handle_anomaly(anomaly, drone_collection)
