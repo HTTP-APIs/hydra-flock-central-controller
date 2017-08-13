@@ -42,7 +42,7 @@ def find_nearest_drone(drone_collection, anomaly):
     closest_drone = None
     drone_list = gen_drone_list_from_collection(drone_collection)
     for drone in drone_list:
-        if drone["DroneState"]["Status"] != "Confirming":
+        if drone["DroneState"]["Status"] == "Active":
             if str(drone["DroneID"]) != str(anomaly["DroneID"]):
                 drone_location = tuple([float(x) for x in drone["DroneState"]["Position"].split(',')])
                 anomaly_location = tuple([float(x) for x in anomaly["Location"].split(',')])

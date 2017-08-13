@@ -17,6 +17,11 @@ def is_confirming(drone):
     return drone["DroneState"]["Status"] == "Confirming"
 
 
+def is_active(drone):
+    """Check if the drone is in confirmation state."""
+    return drone["DroneState"]["Status"] == "Active"
+
+
 def handle_anomaly(anomaly, drone_collection):
     """Handle the anomaly by sending a drone to check it out."""
     drone = find_nearest_drone(drone_collection, anomaly)
