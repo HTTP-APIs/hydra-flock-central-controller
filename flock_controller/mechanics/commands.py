@@ -16,8 +16,8 @@ def gen_Command(drone_id, state):
 
 def confirm_anomaly(drone):
     """Issue command to drone to confirm the anomaly."""
-    drone["DroneState"]["Status"] = "Confirming"
-    command = gen_Command(drone["DroneState"])
+    drone["State"]["Status"] = "Confirming"
+    command = gen_Command(drone["State"])
     return command
 
 

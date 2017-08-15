@@ -17,12 +17,12 @@ LOOP_TIME = 17
 
 def is_confirming(drone):
     """Check if the drone is in confirmation state."""
-    return drone["DroneState"]["Status"] == "Confirming"
+    return drone["State"]["Status"] == "Confirming"
 
 
 def is_active(drone):
     """Check if the drone is in confirmation state."""
-    return drone["DroneState"]["Status"] == "Active"
+    return drone["State"]["Status"] == "Active"
 
 
 def handle_anomaly(anomaly, drone_collection):

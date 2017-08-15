@@ -111,15 +111,15 @@ def send_anomaly(anomaly, drone_id):
 #
 # def get_new_state(anomaly, drone):
 #     """Create the new drone state based on the anomaly."""
-#     drone_position = tuple([float(x) for x in drone["DroneState"]["Position"].split(',')])
+#     drone_position = tuple([float(x) for x in drone["State"]["Position"].split(',')])
 #     anomaly_position = tuple([float(x) for x in anomaly["Location"].split(',')])
 #
 #     if haversine(drone_position, anomaly_position) < 10:
-#         drone["DroneState"]["State"] = "Active"
+#         drone["State"]["State"] = "Active"
 #         return drone, "ReadData"
 #
 #     direction = get_direction(source=drone_position, destination=anomaly_position)
-#     drone["DroneState"]["Direction"] = direction
+#     drone["State"]["Direction"] = direction
 #     return drone, None
 #
 

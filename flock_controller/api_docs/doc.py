@@ -479,7 +479,7 @@ doc = {
                     "property": "vocab:State",
                     "readonly": "false",
                     "required": "true",
-                    "title": "DroneState",
+                    "title": "State",
                     "writeonly": "false"
                 },
                 {
