@@ -153,6 +153,13 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Message",
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
+    message.add_supported_op(HydraClassOp("DeleteMessage",
+                                        "DELETE",
+                                        None,
+                                        None,
+                                        [{"statusCode": 404, "description": "Message not found"},
+                                         {"statusCode": 200, "description": "Message successfully deleted."}]))
+
 
     anomaly = HydraClass("Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
     anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))

@@ -8,7 +8,8 @@ from flock_controller.mechanics.main import CENTRAL_SERVER, RES_CS, IRI_CS
 
 def get_drone_collection():
     """Get the collection of drones from the server."""
-    get_drone_collection_ = RES_CS.find_suitable_operation(None, None, CENTRAL_SERVER.DroneCollection)
+    get_drone_collection_ = RES_CS.find_suitable_operation(
+        None, None, CENTRAL_SERVER.DroneCollection)
     resp, body = get_drone_collection_()
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     body = json.loads(body.decode('utf-8'))

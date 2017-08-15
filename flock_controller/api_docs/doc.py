@@ -52,6 +52,57 @@ doc = {
     "possibleStatus": [],
     "supportedClass": [
         {
+            "@id": "vocab:Datastream",
+            "@type": "hydra:Class",
+            "description": "Class for a datastream entry",
+            "supportedOperation": [
+                {
+                    "@type": "hydra:Operation",
+                    "expects": "null",
+                    "method": "GET",
+                    "possibleStatus": [
+                        {
+                            "description": "Data not found",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "Data returned",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "vocab:Datastream",
+                    "title": "ReadDatastream"
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/QuantitativeValue",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Temperature",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/identifier",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "DroneID",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/geo",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Position",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "Datastream"
+        },
+        {
             "@id": "vocab:Anomaly",
             "@type": "hydra:Class",
             "description": "Class for Temperature anomalies that need to be confirmed",
@@ -154,61 +205,65 @@ doc = {
             "title": "Anomaly"
         },
         {
-            "@id": "vocab:State",
+            "@id": "vocab:Location",
             "@type": "hydra:Class",
-            "description": "Class for drone state objects",
-            "supportedOperation": [],
-            "supportedProperty": [
+            "description": "Class for location of the central controller.",
+            "supportedOperation": [
                 {
-                    "@type": "SupportedProperty",
-                    "property": "http://auto.schema.org/speed",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Speed",
-                    "writeonly": "false"
+                    "@type": "http://schema.org/UpdateAction",
+                    "expects": "vocab:Location",
+                    "method": "POST",
+                    "possibleStatus": [
+                        {
+                            "description": "Controller location updated successfully.",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "null",
+                    "title": "UpdateLocation"
                 },
+                {
+                    "@type": "http://schema.org/AddAction",
+                    "expects": "vocab:Location",
+                    "method": "PUT",
+                    "possibleStatus": [
+                        {
+                            "description": "Controller location added successfully.",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "null",
+                    "title": "AddLocation"
+                },
+                {
+                    "@type": "hydra:Operation",
+                    "expects": "null",
+                    "method": "GET",
+                    "possibleStatus": [
+                        {
+                            "description": "Location of Controller not found.",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "Location of controller returned.",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "vocab:Location",
+                    "title": "GetLocation"
+                }
+            ],
+            "supportedProperty": [
                 {
                     "@type": "SupportedProperty",
                     "property": "http://schema.org/geo",
                     "readonly": "false",
                     "required": "true",
-                    "title": "Position",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/Property",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Direction",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/fuelCapacity",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Battery",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "https://schema.org/status",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Status",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/identifier",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "DroneID",
+                    "title": "Location",
                     "writeonly": "false"
                 }
             ],
-            "title": "State"
+            "title": "Location"
         },
         {
             "@id": "vocab:ControllerLog",
@@ -252,6 +307,105 @@ doc = {
                 }
             ],
             "title": "ControllerLog"
+        },
+        {
+            "@id": "vocab:DroneLog",
+            "@type": "hydra:Class",
+            "description": "Class for a drone log entry",
+            "supportedOperation": [
+                {
+                    "@type": "hydra:Operation",
+                    "expects": "null",
+                    "method": "GET",
+                    "possibleStatus": [
+                        {
+                            "description": "DroneLog not found",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "DroneLog returned",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "vocab:DroneLog",
+                    "title": "ReadDroneLog"
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/identifier",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "DroneID",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/Text",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "LogString",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "DroneLog"
+        },
+        {
+            "@id": "vocab:Command",
+            "@type": "hydra:Class",
+            "description": "Class for drone commands",
+            "supportedOperation": [
+                {
+                    "@type": "hydra:Operation",
+                    "expects": "null",
+                    "method": "GET",
+                    "possibleStatus": [
+                        {
+                            "description": "Command not found",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "Command Returned",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "vocab:Command",
+                    "title": "GetCommand"
+                },
+                {
+                    "@type": "http://schema.org/AddAction",
+                    "expects": "vocab:Command",
+                    "method": "PUT",
+                    "possibleStatus": [
+                        {
+                            "description": "Command added",
+                            "statusCode": 201
+                        }
+                    ],
+                    "returns": "null",
+                    "title": "AddCommand"
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/identifier",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "DroneID",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "vocab:State",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "State",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "Command"
         },
         {
             "@id": "vocab:Drone",
@@ -364,217 +518,6 @@ doc = {
             "title": "Drone"
         },
         {
-            "@id": "vocab:Location",
-            "@type": "hydra:Class",
-            "description": "Class for location of the central controller.",
-            "supportedOperation": [
-                {
-                    "@type": "http://schema.org/UpdateAction",
-                    "expects": "vocab:Location",
-                    "method": "POST",
-                    "possibleStatus": [
-                        {
-                            "description": "Controller location updated successfully.",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "null",
-                    "title": "UpdateLocation"
-                },
-                {
-                    "@type": "http://schema.org/AddAction",
-                    "expects": "vocab:Location",
-                    "method": "PUT",
-                    "possibleStatus": [
-                        {
-                            "description": "Controller location added successfully.",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "null",
-                    "title": "AddLocation"
-                },
-                {
-                    "@type": "hydra:Operation",
-                    "expects": "null",
-                    "method": "GET",
-                    "possibleStatus": [
-                        {
-                            "description": "Location of Controller not found.",
-                            "statusCode": 404
-                        },
-                        {
-                            "description": "Location of controller returned.",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "vocab:Location",
-                    "title": "GetLocation"
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/geo",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Location",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "Location"
-        },
-        {
-            "@id": "vocab:DroneLog",
-            "@type": "hydra:Class",
-            "description": "Class for a drone log entry",
-            "supportedOperation": [
-                {
-                    "@type": "hydra:Operation",
-                    "expects": "null",
-                    "method": "GET",
-                    "possibleStatus": [
-                        {
-                            "description": "DroneLog not found",
-                            "statusCode": 404
-                        },
-                        {
-                            "description": "DroneLog returned",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "vocab:DroneLog",
-                    "title": "ReadDroneLog"
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/identifier",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "DroneID",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/Text",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "LogString",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "DroneLog"
-        },
-        {
-            "@id": "vocab:Datastream",
-            "@type": "hydra:Class",
-            "description": "Class for a datastream entry",
-            "supportedOperation": [
-                {
-                    "@type": "hydra:Operation",
-                    "expects": "null",
-                    "method": "GET",
-                    "possibleStatus": [
-                        {
-                            "description": "Data not found",
-                            "statusCode": 404
-                        },
-                        {
-                            "description": "Data returned",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "vocab:Datastream",
-                    "title": "ReadDatastream"
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/QuantitativeValue",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Temperature",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/identifier",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "DroneID",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/geo",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "Position",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "Datastream"
-        },
-        {
-            "@id": "vocab:Command",
-            "@type": "hydra:Class",
-            "description": "Class for drone commands",
-            "supportedOperation": [
-                {
-                    "@type": "hydra:Operation",
-                    "expects": "null",
-                    "method": "GET",
-                    "possibleStatus": [
-                        {
-                            "description": "Command not found",
-                            "statusCode": 404
-                        },
-                        {
-                            "description": "Command Returned",
-                            "statusCode": 200
-                        }
-                    ],
-                    "returns": "vocab:Command",
-                    "title": "GetCommand"
-                },
-                {
-                    "@type": "http://schema.org/AddAction",
-                    "expects": "vocab:Command",
-                    "method": "PUT",
-                    "possibleStatus": [
-                        {
-                            "description": "Command added",
-                            "statusCode": 201
-                        }
-                    ],
-                    "returns": "null",
-                    "title": "AddCommand"
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "property": "http://schema.org/identifier",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "DroneID",
-                    "writeonly": "false"
-                },
-                {
-                    "@type": "SupportedProperty",
-                    "property": "vocab:State",
-                    "readonly": "false",
-                    "required": "true",
-                    "title": "State",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "Command"
-        },
-        {
             "@id": "vocab:Message",
             "@type": "hydra:Class",
             "description": "Class for messages received by the GUI interface",
@@ -595,6 +538,23 @@ doc = {
                     ],
                     "returns": "vocab:Message",
                     "title": "GetMessage"
+                },
+                {
+                    "@type": "http://schema.org/DeleteAction",
+                    "expects": "null",
+                    "method": "DELETE",
+                    "possibleStatus": [
+                        {
+                            "description": "Message not found",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "Message successfully deleted.",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "null",
+                    "title": "DeleteMessage"
                 }
             ],
             "supportedProperty": [
@@ -608,6 +568,63 @@ doc = {
                 }
             ],
             "title": "Message"
+        },
+        {
+            "@id": "vocab:State",
+            "@type": "hydra:Class",
+            "description": "Class for drone state objects",
+            "supportedOperation": [],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://auto.schema.org/speed",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Speed",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/geo",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Position",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/Property",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Direction",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/fuelCapacity",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Battery",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "https://schema.org/status",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "Status",
+                    "writeonly": "false"
+                },
+                {
+                    "@type": "SupportedProperty",
+                    "property": "http://schema.org/identifier",
+                    "readonly": "false",
+                    "required": "true",
+                    "title": "DroneID",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "State"
         },
         {
             "@id": "vocab:HttpApiLog",
@@ -686,30 +703,30 @@ doc = {
             "title": "Collection"
         },
         {
-            "@id": "vocab:ControllerLogCollection",
+            "@id": "vocab:HttpApiLogCollection",
             "@type": "hydra:Class",
-            "description": "A collection of controllerlog",
+            "description": "A collection of httpapilog",
             "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
             "supportedOperation": [
                 {
-                    "@id": "_:controllerlog_collection_retrieve",
+                    "@id": "_:httpapilog_collection_retrieve",
                     "@type": "hydra:Operation",
-                    "description": "Retrieves all ControllerLog entities",
+                    "description": "Retrieves all HttpApiLog entities",
                     "expects": "null",
                     "method": "GET",
-                    "returns": "vocab:ControllerLogCollection",
+                    "returns": "vocab:HttpApiLogCollection",
                     "statusCodes": []
                 },
                 {
-                    "@id": "_:controllerlog_create",
+                    "@id": "_:httpapilog_create",
                     "@type": "http://schema.org/AddAction",
-                    "description": "Create new ControllerLog entitity",
-                    "expects": "vocab:ControllerLog",
+                    "description": "Create new HttpApiLog entitity",
+                    "expects": "vocab:HttpApiLog",
                     "method": "PUT",
-                    "returns": "vocab:ControllerLog",
+                    "returns": "vocab:HttpApiLog",
                     "statusCodes": [
                         {
-                            "description": "If the ControllerLog entity was created successfully.",
+                            "description": "If the HttpApiLog entity was created successfully.",
                             "statusCode": 201
                         }
                     ]
@@ -718,7 +735,7 @@ doc = {
             "supportedProperty": [
                 {
                     "@type": "SupportedProperty",
-                    "description": "The controllerlog",
+                    "description": "The httpapilog",
                     "property": "http://www.w3.org/ns/hydra/core#member",
                     "readonly": "false",
                     "required": "false",
@@ -726,50 +743,7 @@ doc = {
                     "writeonly": "false"
                 }
             ],
-            "title": "ControllerLogCollection"
-        },
-        {
-            "@id": "vocab:AnomalyCollection",
-            "@type": "hydra:Class",
-            "description": "A collection of anomaly",
-            "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
-            "supportedOperation": [
-                {
-                    "@id": "_:anomaly_collection_retrieve",
-                    "@type": "hydra:Operation",
-                    "description": "Retrieves all Anomaly entities",
-                    "expects": "null",
-                    "method": "GET",
-                    "returns": "vocab:AnomalyCollection",
-                    "statusCodes": []
-                },
-                {
-                    "@id": "_:anomaly_create",
-                    "@type": "http://schema.org/AddAction",
-                    "description": "Create new Anomaly entitity",
-                    "expects": "vocab:Anomaly",
-                    "method": "PUT",
-                    "returns": "vocab:Anomaly",
-                    "statusCodes": [
-                        {
-                            "description": "If the Anomaly entity was created successfully.",
-                            "statusCode": 201
-                        }
-                    ]
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "description": "The anomaly",
-                    "property": "http://www.w3.org/ns/hydra/core#member",
-                    "readonly": "false",
-                    "required": "false",
-                    "title": "members",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "AnomalyCollection"
+            "title": "HttpApiLogCollection"
         },
         {
             "@id": "vocab:DatastreamCollection",
@@ -815,6 +789,92 @@ doc = {
             "title": "DatastreamCollection"
         },
         {
+            "@id": "vocab:MessageCollection",
+            "@type": "hydra:Class",
+            "description": "A collection of message",
+            "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
+            "supportedOperation": [
+                {
+                    "@id": "_:message_collection_retrieve",
+                    "@type": "hydra:Operation",
+                    "description": "Retrieves all Message entities",
+                    "expects": "null",
+                    "method": "GET",
+                    "returns": "vocab:MessageCollection",
+                    "statusCodes": []
+                },
+                {
+                    "@id": "_:message_create",
+                    "@type": "http://schema.org/AddAction",
+                    "description": "Create new Message entitity",
+                    "expects": "vocab:Message",
+                    "method": "PUT",
+                    "returns": "vocab:Message",
+                    "statusCodes": [
+                        {
+                            "description": "If the Message entity was created successfully.",
+                            "statusCode": 201
+                        }
+                    ]
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "description": "The message",
+                    "property": "http://www.w3.org/ns/hydra/core#member",
+                    "readonly": "false",
+                    "required": "false",
+                    "title": "members",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "MessageCollection"
+        },
+        {
+            "@id": "vocab:AnomalyCollection",
+            "@type": "hydra:Class",
+            "description": "A collection of anomaly",
+            "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
+            "supportedOperation": [
+                {
+                    "@id": "_:anomaly_collection_retrieve",
+                    "@type": "hydra:Operation",
+                    "description": "Retrieves all Anomaly entities",
+                    "expects": "null",
+                    "method": "GET",
+                    "returns": "vocab:AnomalyCollection",
+                    "statusCodes": []
+                },
+                {
+                    "@id": "_:anomaly_create",
+                    "@type": "http://schema.org/AddAction",
+                    "description": "Create new Anomaly entitity",
+                    "expects": "vocab:Anomaly",
+                    "method": "PUT",
+                    "returns": "vocab:Anomaly",
+                    "statusCodes": [
+                        {
+                            "description": "If the Anomaly entity was created successfully.",
+                            "statusCode": 201
+                        }
+                    ]
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "description": "The anomaly",
+                    "property": "http://www.w3.org/ns/hydra/core#member",
+                    "readonly": "false",
+                    "required": "false",
+                    "title": "members",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "AnomalyCollection"
+        },
+        {
             "@id": "vocab:DroneCollection",
             "@type": "hydra:Class",
             "description": "A collection of drone",
@@ -858,30 +918,30 @@ doc = {
             "title": "DroneCollection"
         },
         {
-            "@id": "vocab:HttpApiLogCollection",
+            "@id": "vocab:ControllerLogCollection",
             "@type": "hydra:Class",
-            "description": "A collection of httpapilog",
+            "description": "A collection of controllerlog",
             "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
             "supportedOperation": [
                 {
-                    "@id": "_:httpapilog_collection_retrieve",
+                    "@id": "_:controllerlog_collection_retrieve",
                     "@type": "hydra:Operation",
-                    "description": "Retrieves all HttpApiLog entities",
+                    "description": "Retrieves all ControllerLog entities",
                     "expects": "null",
                     "method": "GET",
-                    "returns": "vocab:HttpApiLogCollection",
+                    "returns": "vocab:ControllerLogCollection",
                     "statusCodes": []
                 },
                 {
-                    "@id": "_:httpapilog_create",
+                    "@id": "_:controllerlog_create",
                     "@type": "http://schema.org/AddAction",
-                    "description": "Create new HttpApiLog entitity",
-                    "expects": "vocab:HttpApiLog",
+                    "description": "Create new ControllerLog entitity",
+                    "expects": "vocab:ControllerLog",
                     "method": "PUT",
-                    "returns": "vocab:HttpApiLog",
+                    "returns": "vocab:ControllerLog",
                     "statusCodes": [
                         {
-                            "description": "If the HttpApiLog entity was created successfully.",
+                            "description": "If the ControllerLog entity was created successfully.",
                             "statusCode": 201
                         }
                     ]
@@ -890,7 +950,7 @@ doc = {
             "supportedProperty": [
                 {
                     "@type": "SupportedProperty",
-                    "description": "The httpapilog",
+                    "description": "The controllerlog",
                     "property": "http://www.w3.org/ns/hydra/core#member",
                     "readonly": "false",
                     "required": "false",
@@ -898,50 +958,7 @@ doc = {
                     "writeonly": "false"
                 }
             ],
-            "title": "HttpApiLogCollection"
-        },
-        {
-            "@id": "vocab:MessageCollection",
-            "@type": "hydra:Class",
-            "description": "A collection of message",
-            "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
-            "supportedOperation": [
-                {
-                    "@id": "_:message_collection_retrieve",
-                    "@type": "hydra:Operation",
-                    "description": "Retrieves all Message entities",
-                    "expects": "null",
-                    "method": "GET",
-                    "returns": "vocab:MessageCollection",
-                    "statusCodes": []
-                },
-                {
-                    "@id": "_:message_create",
-                    "@type": "http://schema.org/AddAction",
-                    "description": "Create new Message entitity",
-                    "expects": "vocab:Message",
-                    "method": "PUT",
-                    "returns": "vocab:Message",
-                    "statusCodes": [
-                        {
-                            "description": "If the Message entity was created successfully.",
-                            "statusCode": 201
-                        }
-                    ]
-                }
-            ],
-            "supportedProperty": [
-                {
-                    "@type": "SupportedProperty",
-                    "description": "The message",
-                    "property": "http://www.w3.org/ns/hydra/core#member",
-                    "readonly": "false",
-                    "required": "false",
-                    "title": "members",
-                    "writeonly": "false"
-                }
-            ],
-            "title": "MessageCollection"
+            "title": "ControllerLogCollection"
         },
         {
             "@id": "vocab:DroneLogCollection",
@@ -1112,75 +1129,35 @@ doc = {
                     "writeonly": "false"
                 },
                 {
-                    "hydra:description": "The ControllerLogCollection collection",
-                    "hydra:title": "controllerlogcollection",
+                    "hydra:description": "The HttpApiLogCollection collection",
+                    "hydra:title": "httpapilogcollection",
                     "property": {
-                        "@id": "vocab:EntryPoint/ControllerLogCollection",
+                        "@id": "vocab:EntryPoint/HttpApiLogCollection",
                         "@type": "hydra:Link",
-                        "description": "The ControllerLogCollection collection",
+                        "description": "The HttpApiLogCollection collection",
                         "domain": "vocab:EntryPoint",
-                        "label": "ControllerLogCollection",
-                        "range": "vocab:ControllerLogCollection",
+                        "label": "HttpApiLogCollection",
+                        "range": "vocab:HttpApiLogCollection",
                         "supportedOperation": [
                             {
-                                "@id": "_:_:controllerlog_collection_retrieve",
+                                "@id": "_:_:httpapilog_collection_retrieve",
                                 "@type": "hydra:Operation",
-                                "description": "Retrieves all ControllerLog entities",
+                                "description": "Retrieves all HttpApiLog entities",
                                 "expects": "null",
                                 "method": "GET",
-                                "returns": "vocab:ControllerLogCollection",
+                                "returns": "vocab:HttpApiLogCollection",
                                 "statusCodes": []
                             },
                             {
-                                "@id": "_:_:controllerlog_create",
+                                "@id": "_:_:httpapilog_create",
                                 "@type": "http://schema.org/AddAction",
-                                "description": "Create new ControllerLog entitity",
-                                "expects": "vocab:ControllerLog",
+                                "description": "Create new HttpApiLog entitity",
+                                "expects": "vocab:HttpApiLog",
                                 "method": "PUT",
-                                "returns": "vocab:ControllerLog",
+                                "returns": "vocab:HttpApiLog",
                                 "statusCodes": [
                                     {
-                                        "description": "If the ControllerLog entity was created successfully.",
-                                        "statusCode": 201
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "readonly": "true",
-                    "required": "null",
-                    "writeonly": "false"
-                },
-                {
-                    "hydra:description": "The AnomalyCollection collection",
-                    "hydra:title": "anomalycollection",
-                    "property": {
-                        "@id": "vocab:EntryPoint/AnomalyCollection",
-                        "@type": "hydra:Link",
-                        "description": "The AnomalyCollection collection",
-                        "domain": "vocab:EntryPoint",
-                        "label": "AnomalyCollection",
-                        "range": "vocab:AnomalyCollection",
-                        "supportedOperation": [
-                            {
-                                "@id": "_:_:anomaly_collection_retrieve",
-                                "@type": "hydra:Operation",
-                                "description": "Retrieves all Anomaly entities",
-                                "expects": "null",
-                                "method": "GET",
-                                "returns": "vocab:AnomalyCollection",
-                                "statusCodes": []
-                            },
-                            {
-                                "@id": "_:_:anomaly_create",
-                                "@type": "http://schema.org/AddAction",
-                                "description": "Create new Anomaly entitity",
-                                "expects": "vocab:Anomaly",
-                                "method": "PUT",
-                                "returns": "vocab:Anomaly",
-                                "statusCodes": [
-                                    {
-                                        "description": "If the Anomaly entity was created successfully.",
+                                        "description": "If the HttpApiLog entity was created successfully.",
                                         "statusCode": 201
                                     }
                                 ]
@@ -1232,6 +1209,86 @@ doc = {
                     "writeonly": "false"
                 },
                 {
+                    "hydra:description": "The MessageCollection collection",
+                    "hydra:title": "messagecollection",
+                    "property": {
+                        "@id": "vocab:EntryPoint/MessageCollection",
+                        "@type": "hydra:Link",
+                        "description": "The MessageCollection collection",
+                        "domain": "vocab:EntryPoint",
+                        "label": "MessageCollection",
+                        "range": "vocab:MessageCollection",
+                        "supportedOperation": [
+                            {
+                                "@id": "_:_:message_collection_retrieve",
+                                "@type": "hydra:Operation",
+                                "description": "Retrieves all Message entities",
+                                "expects": "null",
+                                "method": "GET",
+                                "returns": "vocab:MessageCollection",
+                                "statusCodes": []
+                            },
+                            {
+                                "@id": "_:_:message_create",
+                                "@type": "http://schema.org/AddAction",
+                                "description": "Create new Message entitity",
+                                "expects": "vocab:Message",
+                                "method": "PUT",
+                                "returns": "vocab:Message",
+                                "statusCodes": [
+                                    {
+                                        "description": "If the Message entity was created successfully.",
+                                        "statusCode": 201
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "readonly": "true",
+                    "required": "null",
+                    "writeonly": "false"
+                },
+                {
+                    "hydra:description": "The AnomalyCollection collection",
+                    "hydra:title": "anomalycollection",
+                    "property": {
+                        "@id": "vocab:EntryPoint/AnomalyCollection",
+                        "@type": "hydra:Link",
+                        "description": "The AnomalyCollection collection",
+                        "domain": "vocab:EntryPoint",
+                        "label": "AnomalyCollection",
+                        "range": "vocab:AnomalyCollection",
+                        "supportedOperation": [
+                            {
+                                "@id": "_:_:anomaly_collection_retrieve",
+                                "@type": "hydra:Operation",
+                                "description": "Retrieves all Anomaly entities",
+                                "expects": "null",
+                                "method": "GET",
+                                "returns": "vocab:AnomalyCollection",
+                                "statusCodes": []
+                            },
+                            {
+                                "@id": "_:_:anomaly_create",
+                                "@type": "http://schema.org/AddAction",
+                                "description": "Create new Anomaly entitity",
+                                "expects": "vocab:Anomaly",
+                                "method": "PUT",
+                                "returns": "vocab:Anomaly",
+                                "statusCodes": [
+                                    {
+                                        "description": "If the Anomaly entity was created successfully.",
+                                        "statusCode": 201
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "readonly": "true",
+                    "required": "null",
+                    "writeonly": "false"
+                },
+                {
                     "hydra:description": "The DroneCollection collection",
                     "hydra:title": "dronecollection",
                     "property": {
@@ -1272,75 +1329,35 @@ doc = {
                     "writeonly": "false"
                 },
                 {
-                    "hydra:description": "The HttpApiLogCollection collection",
-                    "hydra:title": "httpapilogcollection",
+                    "hydra:description": "The ControllerLogCollection collection",
+                    "hydra:title": "controllerlogcollection",
                     "property": {
-                        "@id": "vocab:EntryPoint/HttpApiLogCollection",
+                        "@id": "vocab:EntryPoint/ControllerLogCollection",
                         "@type": "hydra:Link",
-                        "description": "The HttpApiLogCollection collection",
+                        "description": "The ControllerLogCollection collection",
                         "domain": "vocab:EntryPoint",
-                        "label": "HttpApiLogCollection",
-                        "range": "vocab:HttpApiLogCollection",
+                        "label": "ControllerLogCollection",
+                        "range": "vocab:ControllerLogCollection",
                         "supportedOperation": [
                             {
-                                "@id": "_:_:httpapilog_collection_retrieve",
+                                "@id": "_:_:controllerlog_collection_retrieve",
                                 "@type": "hydra:Operation",
-                                "description": "Retrieves all HttpApiLog entities",
+                                "description": "Retrieves all ControllerLog entities",
                                 "expects": "null",
                                 "method": "GET",
-                                "returns": "vocab:HttpApiLogCollection",
+                                "returns": "vocab:ControllerLogCollection",
                                 "statusCodes": []
                             },
                             {
-                                "@id": "_:_:httpapilog_create",
+                                "@id": "_:_:controllerlog_create",
                                 "@type": "http://schema.org/AddAction",
-                                "description": "Create new HttpApiLog entitity",
-                                "expects": "vocab:HttpApiLog",
+                                "description": "Create new ControllerLog entitity",
+                                "expects": "vocab:ControllerLog",
                                 "method": "PUT",
-                                "returns": "vocab:HttpApiLog",
+                                "returns": "vocab:ControllerLog",
                                 "statusCodes": [
                                     {
-                                        "description": "If the HttpApiLog entity was created successfully.",
-                                        "statusCode": 201
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "readonly": "true",
-                    "required": "null",
-                    "writeonly": "false"
-                },
-                {
-                    "hydra:description": "The MessageCollection collection",
-                    "hydra:title": "messagecollection",
-                    "property": {
-                        "@id": "vocab:EntryPoint/MessageCollection",
-                        "@type": "hydra:Link",
-                        "description": "The MessageCollection collection",
-                        "domain": "vocab:EntryPoint",
-                        "label": "MessageCollection",
-                        "range": "vocab:MessageCollection",
-                        "supportedOperation": [
-                            {
-                                "@id": "_:_:message_collection_retrieve",
-                                "@type": "hydra:Operation",
-                                "description": "Retrieves all Message entities",
-                                "expects": "null",
-                                "method": "GET",
-                                "returns": "vocab:MessageCollection",
-                                "statusCodes": []
-                            },
-                            {
-                                "@id": "_:_:message_create",
-                                "@type": "http://schema.org/AddAction",
-                                "description": "Create new Message entitity",
-                                "expects": "vocab:Message",
-                                "method": "PUT",
-                                "returns": "vocab:Message",
-                                "statusCodes": [
-                                    {
-                                        "description": "If the Message entity was created successfully.",
+                                        "description": "If the ControllerLog entity was created successfully.",
                                         "statusCode": 201
                                     }
                                 ]

@@ -26,7 +26,8 @@ def get_anomaly(id_):
     """Get the anomaly with id=id_ from central server."""
     try:
         RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
-        get_anomaly_ = RES.find_suitable_operation(None, None, CENTRAL_SERVER.Anomaly)
+        get_anomaly_ = RES.find_suitable_operation(
+            None, None, CENTRAL_SERVER.Anomaly)
         resp, body = get_anomaly_()
         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
@@ -35,25 +36,28 @@ def get_anomaly(id_):
         anomaly.pop("@id", None)
         return anomaly
     except ConnectionRefusedError:
-        raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
+        raise ConnectionRefusedError(
+            "Connection Refused! Please check the drone server.")
 
 
 def update_anomaly(id_, anomaly):
     """Update the anomaly at central controller."""
     try:
         RES = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
-        update_anomaly_ = RES.find_suitable_operation(operation_type=SCHEMA.UpdateAction, input_type=CENTRAL_SERVER.Anomaly)
+        update_anomaly_ = RES.find_suitable_operation(
+            operation_type=SCHEMA.UpdateAction, input_type=CENTRAL_SERVER.Anomaly)
         resp, body = update_anomaly_(anomaly)
         assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
         print("Anomaly Updated successfully.")
         return Resource.from_iri(resp['location'])
     except ConnectionRefusedError:
-        raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
+        raise ConnectionRefusedError(
+            "Connection Refused! Please check the drone server.")
 
 
 def delete_anomaly(id_):
-    """Delete a anomaly from the collection given the anomaly id."""
+    """Delete an anomaly from the collection given the anomaly id."""
     try:
         i = Resource.from_iri(IRI_CS + "/AnomalyCollection/" + str(id_))
         # name = i.value(SCHEMA.name)
@@ -82,23 +86,27 @@ def get_anomaly_collection():
         return anomalies["members"]
 
     except ConnectionRefusedError:
-        raise ConnectionRefusedError("Connection Refused! Please check the drone server.")
+        raise ConnectionRefusedError(
+            "Connection Refused! Please check the drone server.")
 
 
-def send_anomaly(anomaly, drone_identifier):
+def send_anomaly(anomaly, drone_id):
     """Send the anomaly to the respective drone."""
-    RES, NAMESPACE = find_res(drone_identifier)
+    RES, NAMESPACE = find_res(drone_id)
     print(RES, NAMESPACE)
-    post_anomaly = RES.find_suitable_operation(operation_type=SCHEMA.UpdateAction, input_type=NAMESPACE.Anomaly)
+    post_anomaly = RES.find_suitable_operation(
+        operation_type=SCHEMA.UpdateAction, input_type=NAMESPACE.Anomaly)
     resp, body = post_anomaly(anomaly)
 
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     print("Anomaly sent successfully.")
 
-    http_api_log = gen_HttpApiLog("Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
+    http_api_log = gen_HttpApiLog(
+        "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
     send_http_api_log(http_api_log)
 
-    controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" %(str(anomaly["AnomalyID"])), "Drone %s" %(str(drone_identifier)))
+    controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" % (
+        str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_identifier)))
     send_controllerlog(controllerlog)
 #
 # def get_new_state(anomaly, drone):
@@ -114,6 +122,7 @@ def send_anomaly(anomaly, drone_identifier):
 #     drone["DroneState"]["Direction"] = direction
 #     return drone, None
 #
+
 
 if __name__ == "__main__":
     # print(get_anomaly_collection())

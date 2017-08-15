@@ -56,14 +56,16 @@ def find_res(id_):
     """Find the resource for the drone, given the drone ID."""
     for i in range(len(RES_DRONES)):
         try:
-            get_drone_ = RES_DRONES[i].find_suitable_operation(None, None, DRONES[i].Drone)
+            get_drone_ = RES_DRONES[i].find_suitable_operation(
+                None, None, DRONES[i].Drone)
             resp, body = get_drone_()
-            assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+            assert resp.status in [200, 201], "%s %s" % (
+                resp.status, resp.reason)
             body = json.loads(body.decode('utf-8'))
             drone_id = body["DroneID"]
 
             if str(id_) == str(drone_id):
-                return RES_DRONES[i], DRONES[i]
+                return (RES_DRONES[i], DRONES[i])
         except (ConnectionRefusedError, ConnectionError):
-            print("Drone " + str(i+1) + " Not Accessible")
+            print("Drone " + str(i + 1) + " Not Accessible")
     return None
