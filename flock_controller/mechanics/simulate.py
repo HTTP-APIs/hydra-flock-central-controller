@@ -103,54 +103,59 @@ def generate_command(drone_id, prop, value):
 
 def handle_messages():
     """Handle messages in the MessageCollection."""
-    message_collection = get_message_collection()
+    try:
+        message_collection = get_message_collection()
 
-    for message in message_collection:
-        regex = r'/(.*)/(\d*)'
-        matchObj = re.match(regex, message["@id"])
-        if matchObj:
-            message_id = matchObj.group(2)
-            message_details = get_message(message_id)
+        for message in message_collection:
+            regex = r'/(.*)/(\d*)'
+            matchObj = re.match(regex, message["@id"])
+            if matchObj:
+                message_id = matchObj.group(2)
+                message_details = get_message(message_id)
 
-            ## parse message
-            parsed_message = parse_message(message_details["MessageString"])
+                ## parse message
+                parsed_message = parse_message(message_details["MessageString"])
 
-            if parsed_message is not None:
-                drone_id, prop, value = parsed_message
-                if not validate_message_prop_value(prop, value):
-                    delete_message(message_id)
+                if parsed_message is not None:
+                    drone_id, prop, value = parsed_message
+                    if not validate_message_prop_value(prop, value):
+                        delete_message(message_id)
+                    else:
+                        command = generate_command(drone_id, prop, value)
+                        RES, NAMESPACE = find_res(drone_id)
+                        if RES is not None and NAMESPACE is not None:
+                            issue_command(RES, NAMESPACE, command)
                 else:
-                    command = generate_command(drone_id, prop, value)
-                    RES, NAMESPACE = find_res(drone_id)
-                    if RES is not None and NAMESPACE is not None:
-                        issue_command(RES, NAMESPACE, command)
-            else:
-                ## If error in parsing message then delete message.
-                delete_message(message_id)
+                    ## If error in parsing message then delete message.
+                    delete_message(message_id)
+    except Exception as e:
+        print(e)
 
-    threading.Timer(3, handle_messages).start()
+    threading.Timer(5, handle_messages).start()
 
 
 
 
 def main():
     """15 second time loop for drone."""
-    print("Simulation")
+    print("Controller Simulation")
+    try:
+        anomaly_collection = get_anomaly_collection()
+        drone_collection = get_drone_collection()
 
-    anomaly_collection = get_anomaly_collection()
-    drone_collection = get_drone_collection()
+        non_confirmed_anomalies, negative_anomalies = find_non_confirmed_and_negative_anomalies(
+            anomaly_collection)
+        print(non_confirmed_anomalies)
+        # Handle non_confirmed_anomalies
+        for anomaly in non_confirmed_anomalies:
+            handle_anomaly(anomaly, drone_collection)
 
-    non_confirmed_anomalies, negative_anomalies = find_non_confirmed_and_negative_anomalies(
-        anomaly_collection)
-    print(non_confirmed_anomalies)
-    # Handle non_confirmed_anomalies
-    for anomaly in non_confirmed_anomalies:
-        handle_anomaly(anomaly, drone_collection)
+        # Delete Negative anomalies
+        for anomaly in negative_anomalies:
+            delete_anomaly(anomaly["AnomalyID"])
 
-    # Delete Negative anomalies
-    for anomaly in negative_anomalies:
-        delete_anomaly(anomaly["AnomalyID"])
-
+    except Exception as e:
+        print(e)
     threading.Timer(LOOP_TIME, main).start()
 
 
