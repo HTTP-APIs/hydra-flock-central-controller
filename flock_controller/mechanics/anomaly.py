@@ -4,7 +4,8 @@ import re
 import haversine
 import requests
 from hydra import SCHEMA, Resource
-from flock_controller.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS, find_res
+from flock_controller.mechanics.main import RES_CS, CENTRAL_SERVER, IRI_CS
+from flock_controller.mechanics.main import find_res
 from flock_controller.mechanics.logs import send_http_api_log, gen_HttpApiLog, gen_ControllerLog, send_controllerlog
 from flock_controller.mechanics.location import get_direction
 
@@ -95,20 +96,20 @@ def send_anomaly(anomaly, drone_id):
     RES, NAMESPACE = find_res(drone_id)
     print(RES, NAMESPACE)
     post_anomaly = RES.find_suitable_operation(
-        operation_type=SCHEMA.UpdateAction, input_type=NAMESPACE.Anomaly)
+        operation_type=SCHEMA.AddAction, input_type=NAMESPACE.Anomaly)
     resp, body = post_anomaly(anomaly)
 
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     print("Anomaly sent successfully.")
 
     http_api_log = gen_HttpApiLog(
-        "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_identifier)))
+        "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_id)))
     send_http_api_log(http_api_log)
 
     controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" % (
-        str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_identifier)))
+        str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_id)))
     send_controllerlog(controllerlog)
-#
+
 # def get_new_state(anomaly, drone):
 #     """Create the new drone state based on the anomaly."""
 #     drone_position = tuple([float(x) for x in drone["State"]["Position"].split(',')])
@@ -126,13 +127,13 @@ def send_anomaly(anomaly, drone_id):
 
 if __name__ == "__main__":
     # print(get_anomaly_collection())
-    # anomaly = get_anomaly(24)
-    # anomaly["DroneID"] = "24"
+    anomaly = get_anomaly(18)
+    # anomaly["DroneID"] = "9"
     # print(anomaly)
-    # update_anomaly(24, anomaly)
+    # update_anomaly(18, anomaly)
     #
     # anomaly_collection = get_anomaly_collection()
     # print(anomaly_collection)
     #
-    # print(send_anomaly(anomaly, 10))
-    print(delete_anomaly(24))
+    print(send_anomaly(anomaly, 9))
+    # print(delete_anomaly(24))
