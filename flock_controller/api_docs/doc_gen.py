@@ -166,7 +166,7 @@ def doc_gen(API, BASE_URL):
     anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
     ## Status of any anomaly can be ["Positive", "Negative", "Confirming", "To be confirmed"]
     anomaly.add_supported_prop(HydraClassProp("http://schema.org/eventStatus", "Status", False, False, True))
-    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "AnomalyIsD", False, False, True))
+    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "AnomalyID", False, False, True))
 
     anomaly.add_supported_op(HydraClassOp("GetAnomaly",
                                           "GET",
