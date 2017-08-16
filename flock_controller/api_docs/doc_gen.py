@@ -29,7 +29,7 @@ def doc_gen(API, BASE_URL):
     # Drone Class
     drone = HydraClass("Drone", "Drone", "Class for a drone")
     # Properties
-    drone.add_supported_prop(HydraClassProp("vocab:State", "DroneState", False, False, True))
+    drone.add_supported_prop(HydraClassProp("vocab:State", "State", False, False, True))
     drone.add_supported_prop(HydraClassProp("http://schema.org/name", "name", False, False, True))
     drone.add_supported_prop(HydraClassProp("http://schema.org/model", "model", False, False, True))
     drone.add_supported_prop(HydraClassProp("http://auto.schema.org/speed", "MaxSpeed", False, False, True))
@@ -38,6 +38,12 @@ def doc_gen(API, BASE_URL):
     # Drones will submit their state to the server at certain intervals or when some event happens
     drone.add_supported_op(HydraClassOp("SubmitDrone",
                                         "POST",
+                                        "vocab:Drone",
+                                        None,
+                                        [{"statusCode": 200, "description": "Drone updated"}]))
+
+    drone.add_supported_op(HydraClassOp("UpdateDrone",
+                                        "PUT",
                                         "vocab:Drone",
                                         None,
                                         [{"statusCode": 200, "description": "Drone updated"}]))
@@ -147,10 +153,20 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Message",
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
+    message.add_supported_op(HydraClassOp("DeleteMessage",
+                                        "DELETE",
+                                        None,
+                                        None,
+                                        [{"statusCode": 404, "description": "Message not found"},
+                                         {"statusCode": 200, "description": "Message successfully deleted."}]))
+
 
     anomaly = HydraClass("Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
     anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))
     anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    ## Status of any anomaly can be ["Positive", "Negative", "Confirming", "To be confirmed"]
+    anomaly.add_supported_prop(HydraClassProp("http://schema.org/eventStatus", "Status", False, False, True))
+    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "AnomalyID", False, False, True))
 
     anomaly.add_supported_op(HydraClassOp("GetAnomaly",
                                           "GET",
@@ -158,6 +174,23 @@ def doc_gen(API, BASE_URL):
                                           "vocab:Anomaly",
                                           [{"statusCode": 404, "description": "Anomaly not found"},
                                            {"statusCode": 200, "description": "Anomaly returned"}]))
+    anomaly.add_supported_op(HydraClassOp("AddAnomaly",
+                                           "PUT",
+                                           "vocab:Anomaly",
+                                           None,
+                                           [{"statusCode": 200, "description": "Anomaly added successfully."}]))
+    anomaly.add_supported_op(HydraClassOp("UpdateAnomaly",
+                                           "POST",
+                                           "vocab:Anomaly",
+                                           None,
+                                           [{"statusCode": 201, "description": "Anomaly updated successfully."}]))
+    anomaly.add_supported_op(HydraClassOp("DeleteAnomaly",
+                                        "DELETE",
+                                        None,
+                                        None,
+                                        [{"statusCode": 404, "description": "Anomaly not found"},
+                                         {"statusCode": 200, "description": "Anomaly successfully deleted."}]))
+
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)

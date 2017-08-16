@@ -1,6 +1,6 @@
 import os
 
-## Using sqlite as database
+# Using sqlite as database
 global DB_URL
 db_path = os.path.join(os.path.dirname(__file__), 'database.db')
 DB_URL = 'sqlite:///{}'.format(db_path)
@@ -11,7 +11,7 @@ HYDRUS_SERVER_URL = "http://localhost:8080/"
 PORT = 8080
 API_NAME = "api"
 
-## Drone configuration
+# Drone configuration
 global CENTRAL_SERVER_NAMESPACE, DRONE1_NAMESPACE, DRONE2_NAMESPACE, DRONE3_NAMESPACE, DRONE4_NAMESPACE
 CENTRAL_SERVER_NAMESPACE = "http://localhost:8080/api/vocab#"
 DRONE1_NAMESPACE = "http://localhost:8081/api/vocab#"
