@@ -61,13 +61,14 @@ def parse_message(message_string):
     Property can be Direction, Speed or Status and values can be anything
     supported by that respective Property."""
 
-    message_items = message_string.split(" ")
+    message_items = message_string.lower().split(" ")
+    print(message_items)
     try:
-        drone_id = message_items[message_items.index("Drone") + 1]
-        prop = message_items[message_items.index(drone_id) + 1].title()
+        drone_id = message_items[message_items.index("drone") + 1]
+        prop = message_items[message_items.index(drone_id) + 1]
         value = message_items[message_items.index(prop) + 1]
-
-        return (drone_id, prop, value)
+        print(drone_id, prop.title(), value.title())
+        return (drone_id, prop.title(), value.title())
     except Exception as e:
         print(e)
         return None
@@ -95,6 +96,7 @@ def validate_message_prop_value(prop, value):
 def generate_command(drone_id, prop, value):
     """Generate a command object given a property and value."""
     state = {
+        "@type": 'State',
         prop : value
     }
     command = gen_Command(drone_id, state)
@@ -105,6 +107,7 @@ def handle_messages():
     """Handle messages in the MessageCollection."""
     try:
         message_collection = get_message_collection()
+        print(message_collection)
 
         for message in message_collection:
             regex = r'/(.*)/(\d*)'
@@ -122,12 +125,13 @@ def handle_messages():
                         delete_message(message_id)
                     else:
                         command = generate_command(drone_id, prop, value)
+                        print(command)
                         RES, NAMESPACE = find_res(drone_id)
                         if RES is not None and NAMESPACE is not None:
                             issue_command(RES, NAMESPACE, command)
-                else:
-                    ## If error in parsing message then delete message.
-                    delete_message(message_id)
+
+                ## delete message
+                delete_message(message_id)
     except Exception as e:
         print(e)
 
