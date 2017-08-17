@@ -9,6 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from hydrus.data.db_models import Base
 from flock_controller.settings import DB_URL, PORT, HYDRUS_SERVER_URL, API_NAME
+from gevent.wsgi import WSGIServer
 
 
 import os
@@ -42,4 +43,5 @@ if __name__ == "__main__":
     with set_doc(app, apidoc):
         with set_hydrus_server_url(app, HYDRUS_SERVER_URL):
             with set_session(app, session):
-                app.run(host='127.0.0.1', debug=True, port=PORT)
+                http_server = WSGIServer(('', PORT), app)
+                http_server.serve_forever()
