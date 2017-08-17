@@ -102,13 +102,14 @@ def send_anomaly(anomaly, drone_id):
     assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
     print("Anomaly sent successfully.")
 
-    http_api_log = gen_HttpApiLog(
-        "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_id)))
-    send_http_api_log(http_api_log)
 
     controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" % (
         str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_id)))
     send_controllerlog(controllerlog)
+
+    http_api_log = gen_HttpApiLog(
+    "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_id)))
+    send_http_api_log(http_api_log)
 
 # def get_new_state(anomaly, drone):
 #     """Create the new drone state based on the anomaly."""
