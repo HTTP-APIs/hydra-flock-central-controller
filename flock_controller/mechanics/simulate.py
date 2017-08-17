@@ -70,7 +70,7 @@ def parse_message(message_string):
         value = message_items[message_items.index(prop) + 1]
         print(drone_id, prop.title(), value.title())
 
-        controllerlog = gen_ControllerLog("Central Controller parsing Message '%s'" % (
+        controllerlog = gen_ControllerLog("Parsing Message '%s'" % (
             str(message_string)), "")
         send_controllerlog(controllerlog)
 
@@ -162,7 +162,7 @@ def handle_messages():
                                 issue_command(RES, NAMESPACE, command)
 
                                 controllerlog = gen_ControllerLog(
-                                    "Central Controller issued command to", "Drone %s" % (str(drone_id)))
+                                    "Issued command to", "Drone %s" % (str(drone_id)))
                                 send_controllerlog(controllerlog)
 
                                 http_api_log = gen_HttpApiLog(

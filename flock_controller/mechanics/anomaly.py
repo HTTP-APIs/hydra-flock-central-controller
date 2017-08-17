@@ -103,7 +103,7 @@ def send_anomaly(anomaly, drone_id):
     print("Anomaly sent successfully.")
 
 
-    controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" % (
+    controllerlog = gen_ControllerLog("Assigned Anomaly with ID %s to" % (
         str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_id)))
     send_controllerlog(controllerlog)
 
