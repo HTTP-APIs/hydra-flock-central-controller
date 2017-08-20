@@ -16,24 +16,32 @@ def gen_Location(coordinate_str):
 
 def update_location(location):
     """Update the area of interest on central server."""
-    update_location_ = RES_CS.find_suitable_operation(
-        operation_type=SCHEMA.UpdateAction,
-        input_type=CENTRAL_SERVER.Location)
-    resp, body = update_location_(location)
-    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+    try:
+        update_location_ = RES_CS.find_suitable_operation(
+            operation_type=SCHEMA.UpdateAction,
+            input_type=CENTRAL_SERVER.Location)
+        resp, body = update_location_(location)
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
-    return Resource.from_iri(resp['location'])
+        return Resource.from_iri(resp['location'])
+    except Exception as e:
+        print(e)
+        return None
 
 
 def add_location(location):
     """Update the area of interest on central server."""
-    add_location_ = RES_CS.find_suitable_operation(
-        operation_type=SCHEMA.AddAction,
-        input_type=CENTRAL_SERVER.Location)
-    resp, body = add_location_(location)
-    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+    try:
+        add_location_ = RES_CS.find_suitable_operation(
+            operation_type=SCHEMA.AddAction,
+            input_type=CENTRAL_SERVER.Location)
+        resp, body = add_location_(location)
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
 
-    return Resource.from_iri(resp['location'])
+        return Resource.from_iri(resp['location'])
+    except Exception as e:
+        print(e)
+        return None
 
 
 def find_nearest_drone(drone_collection, anomaly):
@@ -69,10 +77,3 @@ def get_direction(source, destination):
             return "W"
         else:
             return "E"
-
-
-if __name__ == "__main__":
-    # Initialise central server location at 0,0
-    location = gen_Location("0.856901647439813,14.08447265625")
-    print(location)
-    print(add_location(location))

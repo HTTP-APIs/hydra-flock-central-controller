@@ -19,21 +19,32 @@ def doc_gen(API, BASE_URL):
     state = HydraClass("State", "State", "Class for drone state objects")
     # Properties
     # Status include Active, Inactive, Off, Charging
-    state.add_supported_prop(HydraClassProp("http://auto.schema.org/speed", "Speed", False, False, True))
-    state.add_supported_prop(HydraClassProp("http://schema.org/geo", "Position", False, False, True))
-    state.add_supported_prop(HydraClassProp("http://schema.org/Property", "Direction", False, False, True))
-    state.add_supported_prop(HydraClassProp("http://schema.org/fuelCapacity", "Battery", False, False, True))
-    state.add_supported_prop(HydraClassProp("https://schema.org/status", "Status", False, False, True))
-    state.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "http://auto.schema.org/speed", "Speed", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "http://schema.org/geo", "Position", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "http://schema.org/Property", "Direction", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "http://schema.org/fuelCapacity", "Battery", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "https://schema.org/status", "Status", False, False, True))
+    state.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
 
     # Drone Class
     drone = HydraClass("Drone", "Drone", "Class for a drone")
     # Properties
-    drone.add_supported_prop(HydraClassProp("vocab:State", "State", False, False, True))
-    drone.add_supported_prop(HydraClassProp("http://schema.org/name", "name", False, False, True))
-    drone.add_supported_prop(HydraClassProp("http://schema.org/model", "model", False, False, True))
-    drone.add_supported_prop(HydraClassProp("http://auto.schema.org/speed", "MaxSpeed", False, False, True))
-    drone.add_supported_prop(HydraClassProp("http://schema.org/device", "Sensor", False, False, True))
+    drone.add_supported_prop(HydraClassProp(
+        "vocab:State", "State", False, False, True))
+    drone.add_supported_prop(HydraClassProp(
+        "http://schema.org/name", "name", False, False, True))
+    drone.add_supported_prop(HydraClassProp(
+        "http://schema.org/model", "model", False, False, True))
+    drone.add_supported_prop(HydraClassProp(
+        "http://auto.schema.org/speed", "MaxSpeed", False, False, True))
+    drone.add_supported_prop(HydraClassProp(
+        "http://schema.org/device", "Sensor", False, False, True))
     # Operations
     # Drones will submit their state to the server at certain intervals or when some event happens
     drone.add_supported_op(HydraClassOp("SubmitDrone",
@@ -63,8 +74,10 @@ def doc_gen(API, BASE_URL):
 
     # NOTE: Commands are stored in a collection. You may GET a command or you may DELETE it, there is not UPDATE.
     command = HydraClass("Command", "Command", "Class for drone commands")
-    command.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
-    command.add_supported_prop(HydraClassProp("vocab:State", "State", False, False, True))
+    command.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
+    command.add_supported_prop(HydraClassProp(
+        "vocab:State", "State", False, False, True))
     # Used by mechanics to get newly added commands
     command.add_supported_op(HydraClassOp("GetCommand",
                                           "GET",
@@ -81,10 +94,14 @@ def doc_gen(API, BASE_URL):
 
     # Data is stored as a collection. Each data object can be read.
     # New data added to the collection
-    datastream = HydraClass("Datastream", "Datastream", "Class for a datastream entry")
-    datastream.add_supported_prop(HydraClassProp("http://schema.org/QuantitativeValue", "Temperature", False, False, True))
-    datastream.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
-    datastream.add_supported_prop(HydraClassProp("http://schema.org/geo", "Position", False, False, True))
+    datastream = HydraClass("Datastream", "Datastream",
+                            "Class for a datastream entry")
+    datastream.add_supported_prop(HydraClassProp(
+        "http://schema.org/QuantitativeValue", "Temperature", False, False, True))
+    datastream.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
+    datastream.add_supported_prop(HydraClassProp(
+        "http://schema.org/geo", "Position", False, False, True))
     datastream.add_supported_op(HydraClassOp("ReadDatastream",
                                              "GET",
                                              None,
@@ -92,9 +109,12 @@ def doc_gen(API, BASE_URL):
                                              [{"statusCode": 404, "description": "Data not found"},
                                               {"statusCode": 200, "description": "Data returned"}]))
 
-    dronelog = HydraClass("DroneLog", "DroneLog", "Class for a drone log entry")
-    dronelog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
-    dronelog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
+    dronelog = HydraClass("DroneLog", "DroneLog",
+                          "Class for a drone log entry")
+    dronelog.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
+    dronelog.add_supported_prop(HydraClassProp(
+        "http://schema.org/Text", "LogString", False, False, True))
     dronelog.add_supported_op(HydraClassOp("ReadDroneLog",
                                            "GET",
                                            None,
@@ -102,9 +122,12 @@ def doc_gen(API, BASE_URL):
                                            [{"statusCode": 404, "description": "DroneLog not found"},
                                             {"statusCode": 200, "description": "DroneLog returned"}]))
 
-    controllerlog = HydraClass("ControllerLog", "ControllerLog", "Class for a controller log entry")
-    controllerlog.add_supported_prop(HydraClassProp("http://schema.org/Text", "LogString", False, False, True))
-    controllerlog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
+    controllerlog = HydraClass(
+        "ControllerLog", "ControllerLog", "Class for a controller log entry")
+    controllerlog.add_supported_prop(HydraClassProp(
+        "http://schema.org/Text", "LogString", False, False, True))
+    controllerlog.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
     controllerlog.add_supported_op(HydraClassOp("ReadControllerLog",
                                                 "GET",
                                                 None,
@@ -112,10 +135,14 @@ def doc_gen(API, BASE_URL):
                                                 [{"statusCode": 404, "description": "ControllerLog not found"},
                                                  {"statusCode": 200, "description": "ControllerLog returned"}]))
 
-    httpapilog = HydraClass("HttpApiLog", "HttpApiLog", "Class for a http api log entry")
-    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Subject", False, False, True))
-    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/Action", "Predicate", False, False, True))
-    httpapilog.add_supported_prop(HydraClassProp("http://schema.org/identifier", "Object", False, False, True))
+    httpapilog = HydraClass("HttpApiLog", "HttpApiLog",
+                            "Class for a http api log entry")
+    httpapilog.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "Subject", False, False, True))
+    httpapilog.add_supported_prop(HydraClassProp(
+        "http://schema.org/Action", "Predicate", False, False, True))
+    httpapilog.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "Object", False, False, True))
     httpapilog.add_supported_op(HydraClassOp("ReadHttpApiLog",
                                              "GET",
                                              None,
@@ -124,9 +151,11 @@ def doc_gen(API, BASE_URL):
                                               {"statusCode": 200, "description": "HttpApiLog returned"}]))
 
     # Single object representing the area of interest. No collections.
-    location = HydraClass("Location", "Location", "Class for location of the central controller.", endpoint=True)
+    location = HydraClass("Location", "Location",
+                          "Class for location of the central controller.", endpoint=True)
     # Using two positions to have a bounding box
-    location.add_supported_prop(HydraClassProp("http://schema.org/geo", "Location", False, False, True))
+    location.add_supported_prop(HydraClassProp(
+        "http://schema.org/geo", "Location", False, False, True))
     # Allowing updation of the area of interest
     location.add_supported_op(HydraClassOp("UpdateLocation",
                                            "POST",
@@ -145,8 +174,10 @@ def doc_gen(API, BASE_URL):
                                            [{"statusCode": 404, "description": "Location of Controller not found."},
                                             {"statusCode": 200, "description": "Location of controller returned."}]))
 
-    message = HydraClass("Message", "Message", "Class for messages received by the GUI interface")
-    message.add_supported_prop(HydraClassProp("http://schema.org/Text", "MessageString", False, False, True))
+    message = HydraClass("Message", "Message",
+                         "Class for messages received by the GUI interface")
+    message.add_supported_prop(HydraClassProp(
+        "http://schema.org/Text", "MessageString", False, False, True))
     message.add_supported_op(HydraClassOp("GetMessage",
                                           "GET",
                                           None,
@@ -154,19 +185,23 @@ def doc_gen(API, BASE_URL):
                                           [{"statusCode": 404, "description": "Message not found"},
                                            {"statusCode": 200, "description": "Message returned"}]))
     message.add_supported_op(HydraClassOp("DeleteMessage",
-                                        "DELETE",
-                                        None,
-                                        None,
-                                        [{"statusCode": 404, "description": "Message not found"},
-                                         {"statusCode": 200, "description": "Message successfully deleted."}]))
+                                          "DELETE",
+                                          None,
+                                          None,
+                                          [{"statusCode": 404, "description": "Message not found"},
+                                           {"statusCode": 200, "description": "Message successfully deleted."}]))
 
-
-    anomaly = HydraClass("Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
-    anomaly.add_supported_prop(HydraClassProp("vocab:Location", "Location", False, False, True))
-    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "DroneID", False, False, True))
-    ## Status of any anomaly can be ["Positive", "Negative", "Confirming", "To be confirmed"]
-    anomaly.add_supported_prop(HydraClassProp("http://schema.org/eventStatus", "Status", False, False, True))
-    anomaly.add_supported_prop(HydraClassProp("http://schema.org/identifier", "AnomalyID", False, False, True))
+    anomaly = HydraClass(
+        "Anomaly", "Anomaly", "Class for Temperature anomalies that need to be confirmed")
+    anomaly.add_supported_prop(HydraClassProp(
+        "vocab:Location", "Location", False, False, True))
+    anomaly.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "DroneID", False, False, True))
+    # Status of any anomaly can be ["Positive", "Negative", "Confirming", "To be confirmed"]
+    anomaly.add_supported_prop(HydraClassProp(
+        "http://schema.org/eventStatus", "Status", False, False, True))
+    anomaly.add_supported_prop(HydraClassProp(
+        "http://schema.org/identifier", "AnomalyID", False, False, True))
 
     anomaly.add_supported_op(HydraClassOp("GetAnomaly",
                                           "GET",
@@ -175,22 +210,21 @@ def doc_gen(API, BASE_URL):
                                           [{"statusCode": 404, "description": "Anomaly not found"},
                                            {"statusCode": 200, "description": "Anomaly returned"}]))
     anomaly.add_supported_op(HydraClassOp("AddAnomaly",
-                                           "PUT",
-                                           "vocab:Anomaly",
-                                           None,
-                                           [{"statusCode": 200, "description": "Anomaly added successfully."}]))
+                                          "PUT",
+                                          "vocab:Anomaly",
+                                          None,
+                                          [{"statusCode": 200, "description": "Anomaly added successfully."}]))
     anomaly.add_supported_op(HydraClassOp("UpdateAnomaly",
-                                           "POST",
-                                           "vocab:Anomaly",
-                                           None,
-                                           [{"statusCode": 201, "description": "Anomaly updated successfully."}]))
+                                          "POST",
+                                          "vocab:Anomaly",
+                                          None,
+                                          [{"statusCode": 201, "description": "Anomaly updated successfully."}]))
     anomaly.add_supported_op(HydraClassOp("DeleteAnomaly",
-                                        "DELETE",
-                                        None,
-                                        None,
-                                        [{"statusCode": 404, "description": "Anomaly not found"},
-                                         {"statusCode": 200, "description": "Anomaly successfully deleted."}]))
-
+                                          "DELETE",
+                                          None,
+                                          None,
+                                          [{"statusCode": 404, "description": "Anomaly not found"},
+                                           {"statusCode": 200, "description": "Anomaly successfully deleted."}]))
 
     api_doc.add_supported_class(drone, collection=True)
     api_doc.add_supported_class(state, collection=False)
@@ -210,7 +244,8 @@ def doc_gen(API, BASE_URL):
 
 
 if __name__ == "__main__":
-    dump = json.dumps(doc_gen("api", HYDRUS_SERVER_URL).generate(), indent=4, sort_keys=True)
+    dump = json.dumps(
+        doc_gen("api", HYDRUS_SERVER_URL).generate(), indent=4, sort_keys=True)
     doc = '''"""\nGenerated API Documentation for Server API using server_doc_gen.py."""\n\ndoc = %s''' % dump
     doc = doc + '\n'
     doc = doc.replace('true', '"true"')

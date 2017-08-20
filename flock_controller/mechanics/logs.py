@@ -15,15 +15,18 @@ def gen_ControllerLog(log_string, drone_id):
 
 def send_controllerlog(controllerlog):
     """Post the controller log to the central server."""
-    post_controllerlog = RES_CS.find_suitable_operation(
-        SCHEMA.AddAction, CENTRAL_SERVER.ControllerLog)
-    resp, body = post_controllerlog(controllerlog)
+    try:
+        post_controllerlog = RES_CS.find_suitable_operation(
+            SCHEMA.AddAction, CENTRAL_SERVER.ControllerLog)
+        resp, body = post_controllerlog(controllerlog)
 
-    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-    new_controllerlog = Resource.from_iri(resp['location'])
-    print("Controller Log successfully.")
-    return new_controllerlog
-
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+        new_controllerlog = Resource.from_iri(resp['location'])
+        print("Controller Log successfully.")
+        return new_controllerlog
+    except Exception as e:
+        print(e)
+        return None
 
 def gen_HttpApiLog(source, action, target):
     """Generate a Http Api Log object from action and target."""
@@ -38,11 +41,15 @@ def gen_HttpApiLog(source, action, target):
 
 def send_http_api_log(http_api_log):
     """Post the drone http Api Log to the central server."""
-    post_http_api_log = RES_CS.find_suitable_operation(
-        SCHEMA.AddAction, CENTRAL_SERVER.HttpApiLog)
-    resp, body = post_http_api_log(http_api_log)
+    try:
+        post_http_api_log = RES_CS.find_suitable_operation(
+            SCHEMA.AddAction, CENTRAL_SERVER.HttpApiLog)
+        resp, body = post_http_api_log(http_api_log)
 
-    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-    new_http_api_log = Resource.from_iri(resp['location'])
-    print("Http Api Log posted successfully.")
-    return new_http_api_log
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+        new_http_api_log = Resource.from_iri(resp['location'])
+        print("Http Api Log posted successfully.")
+        return new_http_api_log
+    except Exception as e:
+        print(e)
+        return None

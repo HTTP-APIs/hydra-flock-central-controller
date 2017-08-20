@@ -171,7 +171,7 @@ def handle_messages():
 
                         except:
                             controllerlog = gen_ControllerLog(
-                                "Drone with id %s not found, deleting message." % (str(drone_id)), "" )
+                                "Drone with id %s not found, deleting message." % (str(drone_id)), "")
 
                             send_controllerlog(controllerlog)
 
@@ -204,12 +204,10 @@ def handle_anomalies():
 
 
 def main():
-    """15 second time loop for drone."""
-    print("Controller Simulation")
+    """Main loop for the central controller."""
+    print("Controller Simulation Loop")
     try:
-        # Handle messages
         handle_messages()
-        # Handle anomalies
         handle_anomalies()
 
     except Exception as e:
