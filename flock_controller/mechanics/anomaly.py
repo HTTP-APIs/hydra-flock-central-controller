@@ -36,9 +36,9 @@ def get_anomaly(id_):
         anomaly.pop("@context", None)
         anomaly.pop("@id", None)
         return anomaly
-    except ConnectionRefusedError:
-        raise ConnectionRefusedError(
-            "Connection Refused! Please check the drone server.")
+    except exception as e:
+        print(e)
+        return None
 
 
 def update_anomaly(id_, anomaly):
@@ -52,9 +52,9 @@ def update_anomaly(id_, anomaly):
 
         print("Anomaly Updated successfully.")
         return Resource.from_iri(resp['location'])
-    except ConnectionRefusedError:
-        raise ConnectionRefusedError(
-            "Connection Refused! Please check the drone server.")
+    except Exception as e:
+        print(e)
+        return None
 
 
 def delete_anomaly(id_):
@@ -86,54 +86,30 @@ def get_anomaly_collection():
         anomalies.pop("@id", None)
         return anomalies["members"]
 
-    except ConnectionRefusedError:
-        raise ConnectionRefusedError(
-            "Connection Refused! Please check the drone server.")
+    except Exception as e:
+        print(e)
+        return None
 
 
 def send_anomaly(anomaly, drone_id):
     """Send the anomaly to the respective drone."""
-    RES, NAMESPACE = find_res(drone_id)
-    print(RES, NAMESPACE)
-    post_anomaly = RES.find_suitable_operation(
-        operation_type=SCHEMA.AddAction, input_type=NAMESPACE.Anomaly)
-    resp, body = post_anomaly(anomaly)
+    try:
+        RES, NAMESPACE = find_res(drone_id)
+        print(RES, NAMESPACE)
+        post_anomaly = RES.find_suitable_operation(
+            operation_type=SCHEMA.AddAction, input_type=NAMESPACE.Anomaly)
+        resp, body = post_anomaly(anomaly)
 
-    assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
-    print("Anomaly sent successfully.")
+        assert resp.status in [200, 201], "%s %s" % (resp.status, resp.reason)
+        print("Anomaly sent successfully.")
 
-    http_api_log = gen_HttpApiLog(
-        "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_id)))
-    send_http_api_log(http_api_log)
+        controllerlog = gen_ControllerLog("Assigned Anomaly with ID %s to" % (
+            str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_id)))
+        send_controllerlog(controllerlog)
 
-    controllerlog = gen_ControllerLog("Central Controller assigned Anomaly %s to" % (
-        str(anomaly["AnomalyID"])), "Drone %s" % (str(drone_id)))
-    send_controllerlog(controllerlog)
-
-# def get_new_state(anomaly, drone):
-#     """Create the new drone state based on the anomaly."""
-#     drone_position = tuple([float(x) for x in drone["State"]["Position"].split(',')])
-#     anomaly_position = tuple([float(x) for x in anomaly["Location"].split(',')])
-#
-#     if haversine(drone_position, anomaly_position) < 10:
-#         drone["State"]["State"] = "Active"
-#         return drone, "ReadData"
-#
-#     direction = get_direction(source=drone_position, destination=anomaly_position)
-#     drone["State"]["Direction"] = direction
-#     return drone, None
-#
-
-
-if __name__ == "__main__":
-    # print(get_anomaly_collection())
-    anomaly = get_anomaly(18)
-    # anomaly["DroneID"] = "9"
-    # print(anomaly)
-    # update_anomaly(18, anomaly)
-    #
-    # anomaly_collection = get_anomaly_collection()
-    # print(anomaly_collection)
-    #
-    print(send_anomaly(anomaly, 9))
-    # print(delete_anomaly(24))
+        http_api_log = gen_HttpApiLog(
+            "Central Controller ", "PUT Anomaly", "Drone %s" % (str(drone_id)))
+        send_http_api_log(http_api_log)
+    except Exception as e:
+        print(e)
+        return None

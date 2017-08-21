@@ -14,6 +14,8 @@ setup(name='hydra-flock-central-controller',
                         'Flask==0.11',
                         'Flask-Cors==3.0.3',
                         'Flask-RESTful==0.3.6',
+                        'gevent==1.2.2',
+                        'greenlet==0.4.12',
                         'httplib2==0.10.3',
                         'isodate==0.5.4',
                         'packaging==16.8',
@@ -32,4 +34,4 @@ setup(name='hydra-flock-central-controller',
                         'rdflib-jsonld==0.4.0',
                         'haversine==0.4.5',
                         'requests==2.18.1']
-)
+      )
