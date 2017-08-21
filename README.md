@@ -1,7 +1,7 @@
 # hydra-flock-central-controller
 The Central Controller component for the [simulation](https://github.com/HTTP-APIs/hydra-flock-demo)
 
-This is part of the `hydra-flock-simulation` test-bed. Check the `hydra-flock-demo` for cloud deployment of the full test-bed.
+This is part of the `hydra-flock-demo` test-bed. Check the `hydra-flock-demo` for cloud deployment of the full test-bed.
 
 Running tests:
 * Create and activate a new virtualenv
