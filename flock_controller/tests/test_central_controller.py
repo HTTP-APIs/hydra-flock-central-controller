@@ -58,8 +58,8 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_command_collection(self):
         """Test the CommandCollection endpoint."""
-        state = gen_State(-1000, "50", "North", "1,1", "Active", 100)
-        command = gen_Command(-1000, state)
+        state = gen_State("-1000", "50", "North", "1,1", "Active", "100")
+        command = gen_Command("-1000", state)
 
         request_get = requests.get(CS_URL + 'api/CommandCollection')
         request_put = requests.put(
@@ -153,8 +153,8 @@ class TestCSRequests(unittest.TestCase):
 
     def test_request_command_collection_wrong_type_put(self):
         """Test the CommandCollection endpoint PUT with wrong type ."""
-        state = gen_State(-1000, "50", "North", "1,1", "Active", 100)
-        command = gen_Command(-1000, state)
+        state = gen_State("-1000", "50", "North", "1,1", "Active", "100")
+        command = gen_Command("-1000", state)
         command["@type"] = "Dummy"
 
         request_put = requests.put(
@@ -174,37 +174,37 @@ class TestCSRequests(unittest.TestCase):
         assert request_put.status_code == 400
 
     def test_request_drone_log_collection_wrong_type_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the DroneLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/DroneLogCollection',
                                    data=json.dumps({"@type": "Dummy", "LogString": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_drone_log_collection_wrong_property_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the DroneLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/DroneLogCollection',
                                    data=json.dumps({"@type": "DroneLog", "Log": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_http_api_log_collection_wrong_type_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the HttpApiLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/HttpApiLogCollection',
                                    data=json.dumps({"@type": "Dummy", "Log": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_http_api_log_collection_wrong_property_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the HttpApiLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/HttpApiLogCollection',
                                    data=json.dumps({"@type": "HttpApiLog", "Log": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_controller_log_collection_wrong_type_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the ControllerLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/ControllerLogCollection',
                                    data=json.dumps({"@type": "Dummy", "Log": "Test Log"}))
         assert request_put.status_code == 400
 
     def test_request_controller_log_collection_wrong_type_put(self):
-        """Test the LogEntryCollection endpoint PUT with wrong object type."""
+        """Test the ControllerLogCollection endpoint PUT with wrong object type."""
         request_put = requests.put(CS_URL + 'api/ControllerLogCollection',
                                    data=json.dumps({"@type": "ControllerLog", "Log": "Test Log"}))
         assert request_put.status_code == 400
@@ -218,15 +218,107 @@ class TestCSRequests(unittest.TestCase):
     def test_location_data(self):
         """Test if location submitted is same as location received back."""
         location = gen_Location("5,5")
-        request_post = requests.post(
+        request_put = requests.put(
             CS_URL + 'api/Location', data=json.dumps(location))
         request_get = requests.get(CS_URL + 'api/Location')
         received_location = request_get.json()
         received_location.pop("@id", None)
         received_location.pop("@context", None)
 
-        assert request_post.status_code in [201, 200]
+        assert request_put.status_code in [201, 200]
         assert ordered(location) == ordered(received_location)
+
+    def test_command_data(self):
+        """Test if command data submitted is same as command received back."""
+        state = gen_State('-1000', "50", "North", "1,1", "Active", '100')
+        command = gen_Command('123', state)
+        request_put = requests.put(
+            CS_URL + 'api/CommandCollection/', data=json.dumps(command))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/CommandCollection/' + id_)
+        received_command = request_get.json()
+        received_command.pop("@id", None)
+        received_command.pop("@context", None)
+        assert ordered(command) == ordered(received_command)
+
+    def test_message_data(self):
+        """Test if message data submitted is same as message received back."""
+        message = {"@type": "Message", "MessageString": "Test message"}
+        request_put = requests.put(
+            CS_URL + 'api/MessageCollection/', data=json.dumps(message))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/MessageCollection/' + id_)
+        received_message = request_get.json()
+        received_message.pop("@id", None)
+        received_message.pop("@context", None)
+        assert ordered(message) == ordered(received_message)
+
+    def test_drone_data(self):
+        """Test if Drone data submitted is same as Drone received back."""
+        drone = {"name": "test_drone", "@type": "Drone"}
+        request_put = requests.put(
+            CS_URL + 'api/DroneCollection/', data=json.dumps(drone))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/DroneCollection/' + id_)
+        received_drone = request_get.json()
+        received_drone.pop("@id", None)
+        received_drone.pop("@context", None)
+        assert ordered(drone) == ordered(received_drone)
+
+    def test_datastream_data(self):
+        """Test if Datastream data submitted is same as datastream received back."""
+        datastream = {"DroneID": "1", "@type": "Datastream"}
+        request_put = requests.put(
+            CS_URL + 'api/DatastreamCollection', data=json.dumps(datastream))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/DatastreamCollection/' + id_)
+        received_datastream = request_get.json()
+        received_datastream.pop("@id", None)
+        received_datastream.pop("@context", None)
+        assert ordered(datastream) == ordered(received_datastream)
+
+    def test_controller_log_data(self):
+        """Test if ControllerLog data submitted is same as ControllerLog received back."""
+        controller_log  = {"@type": "ControllerLog", "LogString": "Test Log"}
+        request_put = requests.put(
+            CS_URL + 'api/ControllerLogCollection', data=json.dumps(controller_log))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/ControllerLogCollection/' + id_)
+        received_controller_log = request_get.json()
+        received_controller_log.pop("@id", None)
+        received_controller_log.pop("@context", None)
+        assert ordered(controller_log) == ordered(received_controller_log)
+
+    def test_drone_log_data(self):
+        """Test if DroneLog data submitted is same as DroneLog received back."""
+        drone_log = {"@type": "DroneLog", "LogString": "Test Log"}
+        request_put = requests.put(
+            CS_URL + 'api/DroneLogCollection/', data=json.dumps(drone_log))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/DroneLogCollection/' + id_)
+        received_drone_log = request_get.json()
+        received_drone_log.pop("@id", None)
+        received_drone_log.pop("@context", None)
+        assert ordered(drone_log) == ordered(received_drone_log)
+
+    def test_http_api_log_data(self):
+        """Test if HttpApiLog data submitted is same as HttpApiLog received back."""
+        http_api_log = {"@type": "HttpApiLog", "Subject": "Test Log"}
+        request_put = requests.put(
+            CS_URL + 'api/HttpApiLogCollection/', data=json.dumps(http_api_log))
+
+        id_ = request_put.headers["Location"].split("/")[-1]
+        request_get = requests.get(CS_URL + 'api/HttpApiLogCollection/' + id_)
+        received_http_api_log = request_get.json()
+        received_http_api_log.pop("@id", None)
+        received_http_api_log.pop("@context", None)
+        assert ordered(http_api_log) == ordered(received_http_api_log)
 
 
 if __name__ == '__main__':
