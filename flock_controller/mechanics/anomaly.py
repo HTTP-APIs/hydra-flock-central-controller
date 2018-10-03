@@ -36,7 +36,7 @@ def get_anomaly(id_):
         anomaly.pop("@context", None)
         anomaly.pop("@id", None)
         return anomaly
-    except exception as e:
+    except Exception as e:
         print(e)
         return None
 
