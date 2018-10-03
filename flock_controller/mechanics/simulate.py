@@ -42,7 +42,7 @@ def find_non_confirmed_and_negative_anomalies(anomaly_collection):
     non_confirmd_anomalies, negative_anomalies = list(), list()
     for anomaly in anomaly_collection:
         anomaly_id = None
-        regex = r'/(.*)/(\d*)'
+        regex = r'/(.*)/(.*)'
         matchObj = re.match(regex, anomaly["@id"])
         if matchObj:
             anomaly_id = matchObj.group(2)
@@ -130,8 +130,9 @@ def handle_messages():
         print(message_collection)
 
         for message in message_collection:
-            regex = r'/(.*)/(\d*)'
+            regex = r'/(.*)/(.*)'
             matchObj = re.match(regex, message["@id"])
+            print(matchObj.group(2))
             if matchObj:
                 message_id = matchObj.group(2)
                 message_details = get_message(message_id)
