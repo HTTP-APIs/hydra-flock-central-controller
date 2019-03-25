@@ -1,6 +1,6 @@
 """Script for setting up Hydrus with flock_drone API Doc."""
 from hydrus.app_factory import app_factory
-from hydrus.utils import set_session, set_doc, set_hydrus_server_url
+from hydrus.utils import set_session, set_doc, set_hydrus_server_url, set_api_name
 from hydrus.utils import set_authentication, set_token
 # from hydrus.app import set_session, set_doc, set_hydrus_server_url
 from hydrus.data import doc_parse
@@ -40,10 +40,11 @@ if __name__ == "__main__":
 
     app = app_factory(API_NAME)
 
-    with set_doc(app, apidoc):
-        with set_authentication(app, False):
-            with set_token(app, True):
-                with set_hydrus_server_url(app, HYDRUS_SERVER_URL):
-                    with set_session(app, session):
-                        http_server = WSGIServer(('', PORT), app)
-                        http_server.serve_forever()
+    with set_api_name(app, API_NAME):
+        with set_doc(app, apidoc):
+            with set_authentication(app, False):
+                with set_token(app, True):
+                    with set_hydrus_server_url(app, HYDRUS_SERVER_URL):
+                        with set_session(app, session):
+                            http_server = WSGIServer(('', PORT), app)
+                            http_server.serve_forever()
