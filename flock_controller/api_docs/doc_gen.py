@@ -227,7 +227,7 @@ def doc_gen(API, BASE_URL):
                                            {"statusCode": 200, "description": "Anomaly successfully deleted."}]))
 
     api_doc.add_supported_class(drone, collection=True)
-    api_doc.add_supported_class(state, collection=False)
+    api_doc.add_supported_class(state, collection=True)
     api_doc.add_supported_class(datastream, collection=True)
     api_doc.add_supported_class(dronelog, collection=True)
     api_doc.add_supported_class(controllerlog, collection=True)

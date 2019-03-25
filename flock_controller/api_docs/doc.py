@@ -745,6 +745,49 @@ doc = {
             ],
             "title": "CommandCollection"
         },
+	{
+            "@id": "vocab:StateCollection",
+            "@type": "hydra:Class",
+            "description": "A collection of state",
+            "subClassOf": "http://www.w3.org/ns/hydra/core#Collection",
+            "supportedOperation": [
+                {
+                    "@id": "_:state_collection_retrieve",
+                    "@type": "http://schema.org/FindAction",
+                    "description": "Retrieves all State entities",
+                    "expects": "null",
+                    "method": "GET",
+                    "returns": "vocab:StateCollection",
+                    "statusCodes": []
+                },
+                {
+                    "@id": "_:state_create",
+                    "@type": "http://schema.org/AddAction",
+                    "description": "Create new State entitity",
+                    "expects": "vocab:State",
+                    "method": "PUT",
+                    "returns": "vocab:State",
+                    "statusCodes": [
+                        {
+                            "description": "If the State entity was created successfully.",
+                            "statusCode": 201
+                        }
+                    ]
+                }
+            ],
+            "supportedProperty": [
+                {
+                    "@type": "SupportedProperty",
+                    "description": "The state",
+                    "property": "http://www.w3.org/ns/hydra/core#member",
+                    "readonly": "false",
+                    "required": "false",
+                    "title": "members",
+                    "writeonly": "false"
+                }
+            ],
+            "title": "StateCollection"
+        },
         {
             "@id": "vocab:ControllerLogCollection",
             "@type": "hydra:Class",
@@ -1158,6 +1201,46 @@ doc = {
                                 "statusCodes": [
                                     {
                                         "description": "If the Command entity was created successfully.",
+                                        "statusCode": 201
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "readonly": "true",
+                    "required": "null",
+                    "writeonly": "false"
+                },
+		{
+                    "hydra:description": "The StateCollection collection",
+                    "hydra:title": "statecollection",
+                    "property": {
+                        "@id": "vocab:EntryPoint/StateCollection",
+                        "@type": "hydra:Link",
+                        "description": "The StateCollection collection",
+                        "domain": "vocab:EntryPoint",
+                        "label": "StateCollection",
+                        "range": "vocab:StateCollection",
+                        "supportedOperation": [
+                            {
+                                "@id": "_:state_collection_retrieve",
+                                "@type": "http://schema.org/FindAction",
+                                "description": "Retrieves all State entities",
+                                "expects": "null",
+                                "method": "GET",
+                                "returns": "vocab:StateCollection",
+                                "statusCodes": []
+                            },
+                            {
+                                "@id": "_:state_create",
+                                "@type": "http://schema.org/AddAction",
+                                "description": "Create new State entitity",
+                                "expects": "vocab:State",
+                                "method": "PUT",
+                                "returns": "vocab:State",
+                                "statusCodes": [
+                                    {
+                                        "description": "If the State entity was created successfully.",
                                         "statusCode": 201
                                     }
                                 ]
