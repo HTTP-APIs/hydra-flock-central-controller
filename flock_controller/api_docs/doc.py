@@ -157,7 +157,25 @@ doc = {
             "@id": "vocab:State",
             "@type": "hydra:Class",
             "description": "Class for drone state objects",
-            "supportedOperation": [],
+            "supportedOperation": [
+                {
+                    "@type": "http://schema.org/FindAction",
+                    "expects": "null",
+                    "method": "GET",
+                    "possibleStatus": [
+                        {
+                            "description": "State not found",
+                            "statusCode": 404
+                        },
+                        {
+                            "description": "State Returned",
+                            "statusCode": 200
+                        }
+                    ],
+                    "returns": "vocab:State",
+                    "title": "GetState"
+                }
+            ],
             "supportedProperty": [
                 {
                     "@type": "SupportedProperty",

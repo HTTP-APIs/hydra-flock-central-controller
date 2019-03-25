@@ -31,6 +31,13 @@ def doc_gen(API, BASE_URL):
         "https://schema.org/status", "Status", False, False, True))
     state.add_supported_prop(HydraClassProp(
         "http://schema.org/identifier", "DroneID", False, False, True))
+    
+    state.add_supported_op(HydraClassOp("GetState",
+                                        "GET",
+                                        None,
+                                        "vocab:State",
+                                        [{"statusCode": 404, "description": "State not found"},
+                                         {"statusCode": 200, "description": "State Returned"}]))
 
     # Drone Class
     drone = HydraClass("Drone", "Drone", "Class for a drone")
