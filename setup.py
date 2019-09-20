@@ -19,8 +19,8 @@ setup(name='hydra-flock-central-controller',
       version='0.0.1',
       include_package_data=True,
       description='A simulation for HYDRA: Central Controller API',
-      author='W3C HYDRA development group',
-      author_email='public-hydra@w3.org',
+      author='Hydra Ecosystem',
+      author_email='collective@hydraecosystem.org',
       url='https://github.com/HTTP-APIs/hydra-flock-central-controller',
       install_requires=dependencies
       )
